@@ -3,5 +3,6 @@ import Day02
 
 print("Day 1")
 Day01.main()
-print("Day 2")
+
+print("\nDay 2")
 Day02.main()
