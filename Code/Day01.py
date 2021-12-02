@@ -22,9 +22,10 @@ def part2() -> int:
     return count_increases
 
 
-if __name__ == "__main__":
-    lines = get_int_lines("Inputs/Day01.txt")
+lines = get_int_lines("Inputs/Day01.txt")
 
+
+def main():
     # Part 1: 1184
     print(f"Part 1: {part1()}")
     # Part 2: 1158
@@ -34,3 +35,7 @@ if __name__ == "__main__":
     print(f"Part 1: {time_function(part1)}s")
     # Part 1: 0.0019921099999919535s
     print(f"Part 2: {time_function(part2)}s")
+
+
+if __name__ == "__main__":
+    main()

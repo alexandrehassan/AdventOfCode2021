@@ -34,9 +34,10 @@ def part2() -> int:
     return posX * posY
 
 
-if __name__ == "__main__":
-    lines = get_lines("Inputs/Day02.txt")
+lines = get_lines("Inputs/Day02.txt")
 
+
+def main():
     # Part 1: 1989265
     print(f"Part 1: {part1()}")
     # Part 2: 2089174012
@@ -46,3 +47,7 @@ if __name__ == "__main__":
     print(f"Part 1: {time_function(part1)}s")
     # Part 2: 0.0008213049988262355s
     print(f"Part 2: {time_function(part2)}s")
+
+
+if __name__ == "__main__":
+    main()
