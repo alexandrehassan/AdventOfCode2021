@@ -1,8 +1,12 @@
 import Day01
 import Day02
+import Day03
 
 print("Day 1")
 Day01.main()
 
 print("\nDay 2")
 Day02.main()
+
+print("\nDay 3")
+Day03.main()
