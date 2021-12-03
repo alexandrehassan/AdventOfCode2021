@@ -2,7 +2,7 @@
 Solutions to the advent of code 2021 written in python
 
 # Introduction
-This is a collection of solutions to the advent of code 2021 problems. The solutions are written in python and are tested with pytest.
+This is a collection of solutions to the advent of code 2021 problems. The solutions are written in python.
 
 Advent of code is a series of programming challenges that are released daily on [adventofcode.com](https://adventofcode.com).
 
