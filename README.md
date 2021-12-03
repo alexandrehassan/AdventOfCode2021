@@ -14,5 +14,5 @@ Advent of code is a series of programming challenges that are released daily on 
 - clone the repository:
     ` git clone https://github.com/alexandrehassan/AdventOfCode2021.git`
 - Run the tests:
-    ` cd AdventOfCode2021 && pytest`
+    ` cd AdventOfCode2021 && python Code/AOC.py`
 
