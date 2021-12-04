@@ -1,3 +1,8 @@
+"""
+For problem statement:
+    https://adventofcode.com/2021/day/3
+@author: Alexandre Hassan
+"""
 from Common import get_lines, time_function
 
 
