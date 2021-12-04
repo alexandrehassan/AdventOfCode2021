@@ -20,8 +20,6 @@ class Board:
         for line in self.calledBoard:
             if all(line):
                 return True
-        x = 0
-        x_has_False = False
 
         for i in range(5):
             if self.calledBoard[0][i] and \
@@ -33,14 +31,13 @@ class Board:
 
     def called(self, called: int) -> int:
         for i in range(5):
-            for j in range(5):
-                if self.board[i][j] == called:
-                    self.calledBoard[i][j] = True
-        if self.check_win():
-            self.won = True
-            return self.calculate_score(called)
-        else:
-            return -1
+            index = self.get_index(i, called)
+            if index != -1:
+                self.calledBoard[i][index] = True
+                if self.check_win():
+                    self.won = True
+                    return self.calculate_score(called)
+        return -1
 
     def calculate_score(self, winningNum: int) -> int:
         score = 0
@@ -53,8 +50,14 @@ class Board:
     def has_won(self) -> bool:
         return self.won
 
+    def get_index(self, lineNum: int, toFind: int) -> int:
+        try:
+            return self.board[lineNum].index(toFind)
+        except ValueError:
+            return -1
 
-def part1() -> int:
+
+def makeBoards(lines: list) -> list:
     board = [[0]*5 for i in range(5)]
     boards = []
     board_row = 0
@@ -69,6 +72,11 @@ def part1() -> int:
                 map(int, list(filter(lambda x: x != "", line))))
             board[board_row] = no_space_int_line
             board_row += 1
+    return boards
+
+
+def part1() -> int:
+    boards = makeBoards(lines)
 
     result = -1
     for call in calls:
@@ -80,31 +88,15 @@ def part1() -> int:
 
 
 def part2() -> int:
-    board = [[0]*5 for i in range(5)]
-    boards = []
-    board_row = 0
-    for line in lines:
-        if line == '':
-            boards.append(Board(board))
-            board_row = 0
-            board = [[0]*5 for i in range(5)]
-        else:
-            line = line.split(" ")
-            no_space_int_line = list(
-                map(int, list(filter(lambda x: x != "", line))))
-            board[board_row] = no_space_int_line
-            board_row += 1
+    boards = makeBoards(lines)
 
     result = -1
     for call in calls:
         for board in boards:
-            if not board.has_won():
-
-                result = board.called(call)
-                losing_boards = list(filter(lambda x: not x.has_won(), boards))
-                if len(losing_boards) == 0:
-                    return result
-    print("No result")
+            result = board.called(call)
+            if result != -1 and len(boards) == 1:
+                return result
+        boards = list(filter(lambda x: not x.has_won(), boards))
 
 
 def main():
@@ -113,9 +105,9 @@ def main():
     # Part 2: 5586
     print(f"Part 2: {part2()}")
 
-    # Part 1: 0.008072555s
+    # Part 1: 0.007785375999999999s
     print(f"Part 1: {time_function(part1)}s")
-    # Part 2: 0.08988011800000001s
+    # Part 2: 0.017704187s
     print(f"Part 2: {time_function(part2)}s")
 
 
