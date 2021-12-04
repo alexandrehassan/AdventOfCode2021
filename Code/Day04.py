@@ -58,19 +58,17 @@ class Board:
 
 
 def makeBoards(lines: list) -> list:
-    board = [[0]*5 for i in range(5)]
+    board = []
     boards = []
     board_row = 0
     for line in lines:
         if line == '':
             boards.append(Board(board))
             board_row = 0
-            board = [[0]*5 for i in range(5)]
+            board = []
         else:
-            line = line.split(" ")
-            no_space_int_line = list(
-                map(int, list(filter(lambda x: x != "", line))))
-            board[board_row] = no_space_int_line
+            board.append(list(
+                map(int, list(filter(lambda x: x != "", line.split(" "))))))
             board_row += 1
     return boards
 
