@@ -8,9 +8,8 @@ def get_int_lines(filename: str) -> list:
 
 
 def get_lines(filename: str) -> list:
-    f = open(filename)
-    lines = list(map(lambda line: line.rstrip(), f.readlines()))
-    f.close()
+    with open(filename) as file:
+        lines = list(map(lambda line: line.rstrip(), file.readlines()))
     return lines
 
 
