@@ -82,7 +82,6 @@ def part1() -> int:
             result = board.called(call)
             if result != -1:
                 return result
-    print("No result")
 
 
 def part2() -> int:
