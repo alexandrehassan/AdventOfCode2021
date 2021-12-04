@@ -7,33 +7,29 @@ from Common import get_lines, time_function
 
 
 class Board:
-    # board = []
-    # calledBoard = []
-    # has_won
-
     def __init__(self, board: list) -> None:
         self.board = board
         self.calledBoard = [[False]*5 for i in range(5)]
         self.won = False
 
     def check_win(self) -> bool:
-        for line in self.calledBoard:
-            if all(line):
+        for row in self.calledBoard:
+            if all(row):
                 return True
 
-        for i in range(5):
-            if self.calledBoard[0][i] and \
-                    self.calledBoard[1][i] and \
-                    self.calledBoard[2][i] and\
-                    self.calledBoard[3][i] and\
-                    self.calledBoard[4][i]:
+        for col in range(5):
+            if self.calledBoard[0][col] and \
+                    self.calledBoard[1][col] and \
+                    self.calledBoard[2][col] and\
+                    self.calledBoard[3][col] and\
+                    self.calledBoard[4][col]:
                 return True
 
     def called(self, called: int) -> int:
-        for i in range(5):
-            index = self.get_index(i, called)
+        for row in range(5):
+            index = self.get_index(row, called)
             if index != -1:
-                self.calledBoard[i][index] = True
+                self.calledBoard[row][index] = True
                 if self.check_win():
                     self.won = True
                     return self.calculate_score(called)
@@ -41,18 +37,18 @@ class Board:
 
     def calculate_score(self, winningNum: int) -> int:
         score = 0
-        for i in range(5):
-            for j in range(5):
-                if not self.calledBoard[i][j]:
-                    score += self.board[i][j]
+        for row in range(5):
+            for col in range(5):
+                if not self.calledBoard[row][col]:
+                    score += self.board[row][col]
         return score * winningNum
 
     def has_won(self) -> bool:
         return self.won
 
-    def get_index(self, lineNum: int, toFind: int) -> int:
+    def get_index(self, row: int, toFind: int) -> int:
         try:
-            return self.board[lineNum].index(toFind)
+            return self.board[row].index(toFind)
         except ValueError:
             return -1
 
@@ -61,14 +57,14 @@ def makeBoards(lines: list) -> list:
     board = []
     boards = []
     board_row = 0
-    for line in lines:
-        if line == '':
+    for row in lines:
+        if row == '':
             boards.append(Board(board))
             board_row = 0
             board = []
         else:
             board.append(list(
-                map(int, list(filter(lambda x: x != "", line.split(" "))))))
+                map(int, list(filter(lambda x: x != "", row.split(" "))))))
             board_row += 1
     return boards
 
