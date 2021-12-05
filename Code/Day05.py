@@ -8,7 +8,8 @@ import re
 
 
 class Vent:
-    def __init__(self, line: str):
+    def __init__(self, input: str):
+        line = re.split(',| ->', input)
         self.x1, self.y1, self.x2, self.y2 = int(
             line[0]), int(line[1]), int(line[2]), int(line[3])
         self.isVertical = self.x1 == self.x2
@@ -16,15 +17,15 @@ class Vent:
         if self.isHorizontal or self.isVertical:
             self.x1, self.x2 = self.order(self.x1, self.x2)
             self.y1, self.y2 = self.order(self.y1, self.y2)
-        self.isDiagonal = not self.isVertical and not self.isHorizontal
+            return
+
         self.posDiagonal = self.positiveSlope()
-        if self.isDiagonal:
-            if self.posDiagonal:
-                self.x1, self.x2 = self.order(self.x1, self.x2)
-                self.y1, self.y2 = self.order(self.y1, self.y2)
-            else:
-                self.x1, self.x2 = self.order(self.x1, self.x2)
-                self.y2, self.y1 = self.order(self.y1, self.y2)
+        if self.posDiagonal:
+            self.x1, self.x2 = self.order(self.x1, self.x2)
+            self.y1, self.y2 = self.order(self.y1, self.y2)
+        else:
+            self.x1, self.x2 = self.order(self.x1, self.x2)
+            self.y2, self.y1 = self.order(self.y1, self.y2)
 
     def positiveSlope(self) -> bool:
         return self.x2 - self.x1 > 0 and self.y2 - self.y1 > 0 or \
@@ -44,40 +45,31 @@ class Vent:
 
 
 def part1() -> int:
-    lines = [re.split(',| ->', i) for i in input]
-    vents = [Vent(i) for i in lines]
-    grid = [[0 for i in range(1000)] for j in range(1000)]
+    vents = [Vent(i) for i in input]
+    grid = [[0 for i in range(array_size)] for j in range(array_size)]
 
     toCheck = list(filter(lambda x: x.part1Count(), vents))
 
     for vent in toCheck:
-        # print("-"*20)
-        # print(vent)
-        # for row in grid:
-        #     print(row)
         if vent.isVertical:
-            for i in range(vent.x1, vent.x2 + 1):
-                grid[i][vent.y1] += 1
-        else:
-            for i in range(vent.y1, vent.y2+1):
-                grid[vent.x1][i] += 1
-    count = 0
+            for i in range(vent.y1, vent.y2 + 1):
+                grid[i][vent.x1] += 1
+        elif vent.isHorizontal:
+            for i in range(vent.x1, vent.x2+1):
+                grid[vent.y1][i] += 1
 
+    count = 0
     for row in grid:
+        # print(row)
         count += sum(col >= 2 for col in row)
     return count
 
 
 def part2() -> int:
-    lines = [re.split(',| ->', i) for i in input]
-    vents = [Vent(i) for i in lines]
-    grid = [[0 for i in range(1000)] for j in range(1000)]
+    vents = [Vent(i) for i in input]
+    grid = [[0 for i in range(array_size)] for j in range(array_size)]
 
     for vent in vents:
-        # print("-"*20)
-        # print(vent)
-        # for row in grid:
-        #     print(row)
         if vent.isVertical:
             for i in range(vent.y1, vent.y2 + 1):
                 grid[i][vent.x1] += 1
@@ -97,10 +89,9 @@ def part2() -> int:
                     grid[row][col] += 1
                     row -= 1
                     col += 1
-    count = 0
 
+    count = 0
     for row in grid:
-        # print(row)
         count += sum(col >= 2 for col in row)
 
     return count
@@ -108,18 +99,30 @@ def part2() -> int:
 
 def main():
     # Part 1: 7468
-    # print(f"Part 1: {part1()}")
-    # Part 2: 4550283
+    print(f"Part 1: {part1()}")
+    # Part 2: 22364
     print(f"Part 2: {part2()}")
-    # Too high: 23482
 
-    # # Part 1: 0.0010945069999999998s
-    # print(f"Part 1: {time_function(part1)}s")
-    # # Part 2: 0.0007929939999999999s
-    # print(f"Part 2: {time_function(part2)}s")
+    # Part 1: 0.11251974499999999s
+    print(f"Part 1: {time_function(part1)}s")
+    # Part 2: 0.117770411s
+    print(f"Part 2: {time_function(part2)}s")
+
+
+def test():
+    part1_result = part1()
+    assert part1_result == 7468
+    part2_result = part2()
+    assert part2_result == 22364
+
+    # Part 1: 0.11251974499999999s
+    print(f"Part 1: {time_function(part1)}s")
+    # Part 2: 0.117770411s
+    print(f"Part 2: {time_function(part2)}s")
 
 
 input = get_lines("Inputs/Day05.txt")
+array_size = 1000
 
 if __name__ == "__main__":
-    main()
+    test()
