@@ -3,6 +3,7 @@ For problem statement:
     https://adventofcode.com/2021/day/3
 @author: Alexandre Hassan
 """
+from typing import DefaultDict
 from Common import get_lines, time_function
 import re
 
@@ -18,18 +19,22 @@ class Vent:
             self.x1, self.x2 = self.order(self.x1, self.x2)
             self.y1, self.y2 = self.order(self.y1, self.y2)
             return
+        self.x1, self.y1, self.x2, self.y2 = self.orderDiagonal()
+        # self.posDiagonal = self.positiveSlope()
+        # if self.posDiagonal:
+        #     self.x1, self.x2 = self.order(self.x1, self.x2)
+        #     self.y1, self.y2 = self.order(self.y1, self.y2)
+        # else:
+        #     self.x1, self.x2 = self.order(self.x1, self.x2)
+        #     self.y2, self.y1 = self.order(self.y1, self.y2)
 
-        self.posDiagonal = self.positiveSlope()
-        if self.posDiagonal:
-            self.x1, self.x2 = self.order(self.x1, self.x2)
-            self.y1, self.y2 = self.order(self.y1, self.y2)
+    @property
+    def slope(self) -> int:
+        if self.x2 - self.x1 > 0 and self.y2 - self.y1 > 0 or \
+                self.x2 - self.x1 < 0 and self.y2 - self.y1 < 0:
+            return 1
         else:
-            self.x1, self.x2 = self.order(self.x1, self.x2)
-            self.y2, self.y1 = self.order(self.y1, self.y2)
-
-    def positiveSlope(self) -> bool:
-        return self.x2 - self.x1 > 0 and self.y2 - self.y1 > 0 or \
-            self.x2 - self.x1 < 0 and self.y2 - self.y1 < 0
+            return -1
 
     def part1Count(self):
         return self.isHorizontal or self.isVertical
@@ -40,61 +45,56 @@ class Vent:
         else:
             return z2, z1
 
+    def orderDiagonal(self):
+        if self.x1 < self.x2:
+            return self.x1, self.y1, self.x2, self.y2
+        else:
+            return self.x2, self.y2, self.x1, self.y1
+
+    def getCoords(self) -> list:
+        coords = []
+        if self.isVertical:
+            for i in range(self.y1, self.y2 + 1):
+                coords.append((i, self.x1))
+        elif self.isHorizontal:
+            for i in range(self.x1, self.x2+1):
+                coords.append((self.y1, i))
+        else:
+            b = self.y1 - (self.slope * self.x1)
+            x_range = abs(self.x2 - self.x1)
+            # print(
+            #     f" {self.x1}, {self.y1} -> {self.x2}, {self.y2}   {self.slope}*x + {b} = y {x_range}")
+            for i in range(x_range+1):
+                x = self.x1 + i
+                coords.append((self.slope * x + b, x))
+
+        return coords
+
     def __str__(self) -> str:
         return f"{self.x1},{self.y1}->{self.x2},{self.y2}"
 
 
-def part1() -> int:
+def part1():
     vents = [Vent(i) for i in input]
-    grid = [[0 for i in range(array_size)] for j in range(array_size)]
-
-    toCheck = list(filter(lambda x: x.part1Count(), vents))
-
-    for vent in toCheck:
-        if vent.isVertical:
-            for i in range(vent.y1, vent.y2 + 1):
-                grid[i][vent.x1] += 1
-        elif vent.isHorizontal:
-            for i in range(vent.x1, vent.x2+1):
-                grid[vent.y1][i] += 1
-
-    count = 0
-    for row in grid:
-        # print(row)
-        count += sum(col >= 2 for col in row)
-    return count
-
-
-def part2() -> int:
-    vents = [Vent(i) for i in input]
-    grid = [[0 for i in range(array_size)] for j in range(array_size)]
-
+    grid = DefaultDict(int)
+    vents = list(filter(lambda x: x.part1Count(), vents))
     for vent in vents:
-        if vent.isVertical:
-            for i in range(vent.y1, vent.y2 + 1):
-                grid[i][vent.x1] += 1
-        elif vent.isHorizontal:
-            for i in range(vent.x1, vent.x2+1):
-                grid[vent.y1][i] += 1
-        else:
-            if vent.posDiagonal:
-                row, col = vent.y1, vent.x1
-                for i in range(vent.x2 - vent.x1 + 1):
-                    grid[row][col] += 1
-                    row += 1
-                    col += 1
-            else:
-                row, col = vent.y1, vent.x1
-                for i in range(vent.x2 - vent.x1 + 1):
-                    grid[row][col] += 1
-                    row -= 1
-                    col += 1
+        coords = vent.getCoords()
+        for coord in coords:
+            grid[coord] += 1
+    return len(
+        list(filter(lambda x: x >= 2, grid.values())))
 
-    count = 0
-    for row in grid:
-        count += sum(col >= 2 for col in row)
 
-    return count
+def part2():
+    vents = [Vent(i) for i in input]
+    grid = DefaultDict(int)
+    for vent in vents:
+        coords = vent.getCoords()
+        for coord in coords:
+            grid[coord] += 1
+    return len(
+        list(filter(lambda x: x >= 2, grid.values())))
 
 
 def main():
@@ -103,9 +103,9 @@ def main():
     # Part 2: 22364
     print(f"Part 2: {part2()}")
 
-    # Part 1: 0.11251974499999999s
+    # Part 1: 0.049304637000000005s
     print(f"Part 1: {time_function(part1)}s")
-    # Part 2: 0.117770411s
+    # Part 2: 0.10330538100000002s
     print(f"Part 2: {time_function(part2)}s")
 
 
@@ -113,16 +113,16 @@ def test():
     part1_result = part1()
     assert part1_result == 7468
     part2_result = part2()
+    print(f"Part 2: {part2_result}")
     assert part2_result == 22364
 
-    # Part 1: 0.11251974499999999s
+    # Part 1: 0.09364735399999999s
     print(f"Part 1: {time_function(part1)}s")
     # Part 2: 0.117770411s
     print(f"Part 2: {time_function(part2)}s")
 
 
 input = get_lines("Inputs/Day05.txt")
-array_size = 1000
 
 if __name__ == "__main__":
-    test()
+    main()
