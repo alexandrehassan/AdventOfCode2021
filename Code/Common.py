@@ -13,5 +13,5 @@ def get_lines(filename: str) -> list:
     return lines
 
 
-def time_function(func) -> int:
-    return timeit(func, number=100) / 100
+def time_function(func, iterations=100) -> int:
+    return timeit(func, number=iterations) / 100
