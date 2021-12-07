@@ -1,8 +1,8 @@
 """
-For problem statement:
-    https://adventofcode.com/2021/day/3
-@author: Alexandre Hassan
-"""
+    For problem statement:
+        https://adventofcode.com/2021/day/3
+    @author: Alexandre Hassan
+    """
 from typing import DefaultDict
 from Common import get_lines, time_function
 import re
@@ -20,13 +20,6 @@ class Vent:
             self.y1, self.y2 = self.order(self.y1, self.y2)
             return
         self.x1, self.y1, self.x2, self.y2 = self.orderDiagonal()
-        # self.posDiagonal = self.positiveSlope()
-        # if self.posDiagonal:
-        #     self.x1, self.x2 = self.order(self.x1, self.x2)
-        #     self.y1, self.y2 = self.order(self.y1, self.y2)
-        # else:
-        #     self.x1, self.x2 = self.order(self.x1, self.x2)
-        #     self.y2, self.y1 = self.order(self.y1, self.y2)
 
     @property
     def slope(self) -> int:
@@ -36,7 +29,7 @@ class Vent:
         else:
             return -1
 
-    def part1Count(self):
+    def part1Count(self) -> bool:
         return self.isHorizontal or self.isVertical
 
     def order(self, z1: int, z2: int) -> int:
@@ -51,22 +44,20 @@ class Vent:
         else:
             return self.x2, self.y2, self.x1, self.y1
 
-    def getCoords(self) -> list:
+    def getCoords(self):
         coords = []
         if self.isVertical:
             for i in range(self.y1, self.y2 + 1):
-                coords.append((i, self.x1))
+                yield (i, self.x1)
         elif self.isHorizontal:
             for i in range(self.x1, self.x2+1):
-                coords.append((self.y1, i))
+                yield (self.y1, i)
         else:
             b = self.y1 - (self.slope * self.x1)
             x_range = abs(self.x2 - self.x1)
-            # print(
-            #     f" {self.x1}, {self.y1} -> {self.x2}, {self.y2}   {self.slope}*x + {b} = y {x_range}")
             for i in range(x_range+1):
                 x = self.x1 + i
-                coords.append((self.slope * x + b, x))
+                yield (self.slope * x + b, x)
 
         return coords
 
@@ -79,8 +70,7 @@ def part1():
     grid = DefaultDict(int)
     vents = list(filter(lambda x: x.part1Count(), vents))
     for vent in vents:
-        coords = vent.getCoords()
-        for coord in coords:
+        for coord in vent.getCoords():
             grid[coord] += 1
     return len(
         list(filter(lambda x: x >= 2, grid.values())))
@@ -90,8 +80,7 @@ def part2():
     vents = [Vent(i) for i in input]
     grid = DefaultDict(int)
     for vent in vents:
-        coords = vent.getCoords()
-        for coord in coords:
+        for coord in vent.getCoords():
             grid[coord] += 1
     return len(
         list(filter(lambda x: x >= 2, grid.values())))
