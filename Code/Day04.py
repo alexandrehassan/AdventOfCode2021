@@ -63,7 +63,6 @@ def getInformation(filename: str):
 
 
 def part1(calls: list, boards: list) -> int:
-
     result = -1
     for call in calls:
         for board in boards:
@@ -73,7 +72,6 @@ def part1(calls: list, boards: list) -> int:
 
 
 def part2(calls: list, boards: list) -> int:
-
     result = -1
     for call in calls:
         for board in boards:
@@ -90,9 +88,9 @@ def main():
     # Part 2: 5586
     print(f"Part 2: {part2(instructions, lines)}")
 
-    # Part 1: 0.007785375999999999s
+    # Part 1: 0.012491363s
     print(f"Part 1: {time_function(lambda: part1(instructions, lines))}s")
-    # Part 2: 0.017704187s
+    # Part 2: 0.00029262300000000075s
     print(f"Part 2: {time_function(lambda: part2(instructions, lines))}s")
 
 
@@ -116,9 +114,9 @@ def test():
     print(f"Part 2: {result}")
     assert(result == 5586)
 
-    # Part 1: 0.007785375999999999s
+    # Part 1: 0.012491363s
     print(f"Part 1: {time_function(lambda: part1(instructions, lines))}s")
-    # Part 2: 0.017704187s
+    # Part 2: 0.00029262300000000075s
     print(f"Part 2: {time_function(lambda: part2(instructions, lines))}s")
 
 
