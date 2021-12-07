@@ -19,7 +19,7 @@ class Vent:
             self.x1, self.x2 = self.order(self.x1, self.x2)
             self.y1, self.y2 = self.order(self.y1, self.y2)
             return
-        self.x1, self.y1, self.x2, self.y2 = self.orderDiagonal()
+        self.orderDiagonal()
 
     @property
     def slope(self) -> int:
@@ -39,13 +39,11 @@ class Vent:
             return z2, z1
 
     def orderDiagonal(self):
-        if self.x1 < self.x2:
-            return self.x1, self.y1, self.x2, self.y2
-        else:
-            return self.x2, self.y2, self.x1, self.y1
+        if self.x1 > self.x2:
+            self.x1, self.y1, self.x2, self.y2 =\
+                self.x2, self.y2, self.x1, self.y1
 
     def getCoords(self):
-        coords = []
         if self.isVertical:
             for i in range(self.y1, self.y2 + 1):
                 yield (i, self.x1)
@@ -59,31 +57,27 @@ class Vent:
                 x = self.x1 + i
                 yield (self.slope * x + b, x)
 
-        return coords
-
     def __str__(self) -> str:
         return f"{self.x1},{self.y1}->{self.x2},{self.y2}"
 
 
-def part1():
+def get_num_dangers(part1: bool) -> int:
     vents = [Vent(i) for i in input]
     grid = DefaultDict(int)
-    vents = list(filter(lambda x: x.part1Count(), vents))
+    if part1:
+        vents = list(filter(lambda x: x.part1Count(), vents))
     for vent in vents:
         for coord in vent.getCoords():
             grid[coord] += 1
-    return len(
-        list(filter(lambda x: x >= 2, grid.values())))
+    return sum(1 for i in grid.values() if i >= 2)
+
+
+def part1():
+    return get_num_dangers(True)
 
 
 def part2():
-    vents = [Vent(i) for i in input]
-    grid = DefaultDict(int)
-    for vent in vents:
-        for coord in vent.getCoords():
-            grid[coord] += 1
-    return len(
-        list(filter(lambda x: x >= 2, grid.values())))
+    return get_num_dangers(False)
 
 
 def main():
@@ -94,21 +88,20 @@ def main():
 
     # Part 1: 0.049304637000000005s
     print(f"Part 1: {time_function(part1)}s")
-    # Part 2: 0.10330538100000002s
+    # Part 2: 0.098618044s
     print(f"Part 2: {time_function(part2)}s")
 
 
 def test():
     part1_result = part1()
+    print(f"Part 1: {part1_result}")
     assert part1_result == 7468
     part2_result = part2()
     print(f"Part 2: {part2_result}")
     assert part2_result == 22364
 
-    # Part 1: 0.09364735399999999s
-    print(f"Part 1: {time_function(part1)}s")
-    # Part 2: 0.117770411s
-    print(f"Part 2: {time_function(part2)}s")
+    print(f"Part 1: {time_function(part1,10)}s")
+    print(f"Part 2: {time_function(part2,10)}s")
 
 
 input = get_lines("Inputs/Day05.txt")
