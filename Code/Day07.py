@@ -40,20 +40,16 @@ def part1() -> int:
 def part2() -> int:
     pos = list(map(int, (lines[0].split(","))))
     pos.sort()
-    top = len(pos) - 1
-    bottom = 0
-    middle = (top + bottom) // 2
+    top = pos[-1]
+    bottom = pos[0]
 
     while True:
-        top_dist = calc_2(pos[top], pos)
-        print(f"top_dist {top}: {top_dist}")
-        bottom_dist = calc_2(pos[bottom], pos)
-        print(f"top_dist {top}: {bottom_dist}")
-
+        top_dist = calc_2(top, pos)
+        bottom_dist = calc_2(bottom, pos)
         if top_dist < bottom_dist:
-            bottom = middle
+            bottom += 1
         else:
-            top = middle
+            top -= 1
         if top_dist == bottom_dist:
             return top_dist
 
@@ -61,25 +57,26 @@ def part2() -> int:
 def test():
     part1_result = part1()
     print(f"Part 1: {part1_result}")
-    # assert part1_result == 364898
+    assert part1_result == 364898
 
     part2_result = part2()
     print(f"Part 2: {part2_result}")
+    assert part2_result == 104149091
 
 
 def main():
     # Part 1: 351092
     print(f"Part 1: {part1()}")
-    # Part 2: 1595330616005
+    # Part 2: 104149091
     print(f"Part 2: {part2()}")
 
-    # # Part 1: 0.00012867999999999997s
-    # print(f"Part 1: {time_function(part1)}s")
-    # # Part 2: 0.00030791799999999996s
-    # print(f"Part 2: {time_function(part2)}s")
+    # Part 1: 0.0009632410000000002s
+    print(f"Part 1: {time_function(part1)}s")
+    # Part 2: 0.931904042s
+    print(f"Part 2: {time_function(part2)}s")
 
 
-lines = get_lines("Inputs/Day07_sample.txt")
+lines = get_lines("Inputs/Day07.txt")
 
 if __name__ == "__main__":
-    test()
+    main()
