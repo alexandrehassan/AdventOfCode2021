@@ -3,12 +3,14 @@ For problem statement:
     https://adventofcode.com/2021/day/4
 @author: Alexandre Hassan
 """
-from Common import get_lines, time_function
+from Common import time_function
 
 
 class Board:
-    def __init__(self, board: list) -> None:
-        self.board = board
+    def __init__(self, raw_board: str) -> None:
+        self.board = [[int(x) for x in row.split()]
+                      for row in raw_board.split('\n')]
+
         self.won = False
 
     def check_win(self) -> bool:
@@ -32,13 +34,14 @@ class Board:
                 if self.check_win():
                     self.won = True
                     return self.calculate_score(called)
+                else:
+                    return -1
         return -1
 
     def calculate_score(self, winningNum: int) -> int:
         score = 0
-        for row in range(5):
-            for col in range(5):
-                score += self.board[row][col]
+        for row in self.board:
+            score += sum(row)
         return score * winningNum
 
     def get_index(self, row: int, toFind: int) -> int:
@@ -48,24 +51,19 @@ class Board:
             return -1
 
 
-def makeBoards(lines: list) -> list:
-    board = []
-    boards = []
-    board_row = 0
-    for row in lines:
-        if row == '':
-            boards.append(Board(board))
-            board_row = 0
-            board = []
-        else:
-            board.append(list(
-                map(int, list(filter(lambda x: x != "", row.split(" "))))))
-            board_row += 1
-    return boards
+def makeBoards() -> list:
+    with open("Inputs/Day04.txt") as file:
+
+        calls = list(map(int, (next(file).rstrip()).split(",")))
+        next(file)
+        raw_boards = file.read().split('\n\n')
+    boards = [Board(raw_board.rstrip()) for raw_board in raw_boards]
+
+    return calls, boards
 
 
 def part1() -> int:
-    boards = makeBoards(lines)
+    calls, boards = makeBoards()
 
     result = -1
     for call in calls:
@@ -76,7 +74,7 @@ def part1() -> int:
 
 
 def part2() -> int:
-    boards = makeBoards(lines)
+    calls, boards = makeBoards()
 
     result = -1
     for call in calls:
@@ -115,9 +113,9 @@ def test():
     print(f"Part 2: {time_function(part2)}s")
 
 
-lines = get_lines("Inputs/Day04.txt")
-calls = list(map(int, lines.pop(0).split(",")))
-lines.pop(0)
+# lines = get_lines("Inputs/Day04.txt")
+# calls = list(map(int, lines.pop(0).split(",")))
+# lines.pop(0)
 
 if __name__ == "__main__":
     test()
