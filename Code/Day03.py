@@ -6,21 +6,22 @@ For problem statement:
 from Common import get_lines, time_function
 
 
-def calculate(CO2: bool, lines: list) -> int:
-    bytes = lines
+def calculate(bytes: list, CO2: bool) -> int:
     count_1 = 0
     to_remove = '1'
+    index = 0
 
-    for i in range(len(bytes)):
+    while True:
         count_1 = len(
-            list(filter(lambda x: x[i] == '1', bytes)))
+            list(filter(lambda x: x[index] == '1', bytes)))
         to_remove = '0' if CO2 != (count_1 >= len(bytes)/2) else '1'
 
         bytes = list(
-            filter(lambda x: x[i] == to_remove, bytes))
+            filter(lambda x: x[index] == to_remove, bytes))
 
         if len(bytes) == 1:
             return int(bytes[0], 2)
+        index += 1
 
 
 def flip_bit(string: str) -> int:
@@ -28,13 +29,12 @@ def flip_bit(string: str) -> int:
 
 
 def part1(lines: list) -> int:
-    line_length = len(lines[0])
     num_lines = len(lines)
-    count_1 = [0] * line_length
+    count_1 = [0] * len(lines[0])
 
     for line in lines:
-        for j in range(line_length):
-            count_1[j] += int(line[j])
+        for index, value in enumerate(line):
+            count_1[index] += int(value)
 
     gamma = ""
     for count in count_1:
@@ -43,7 +43,7 @@ def part1(lines: list) -> int:
 
 
 def part2(lines: list) -> int:
-    return calculate(True, lines) * calculate(False, lines)
+    return calculate(lines, CO2=True) * calculate(lines, CO2=False)
 
 
 def main():
