@@ -51,7 +51,6 @@ def part2(lines: list) -> int:
         else:
             top -= 1
         if top_dist == bottom_dist:
-            print("complete")
             return top_dist
 
 
