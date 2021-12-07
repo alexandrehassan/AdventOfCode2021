@@ -30,18 +30,17 @@ def get_O2(lines: list) -> int:
 def get_CO2(lines: list) -> int:
     CO2_lines = lines
     count_1 = 0
-    char_checking = 0
-    to_pop = '1'
+    to_remove = '1'
 
-    while True:
+    for i in range(len(CO2_lines)):
         count_1 = len(
-            list(filter(lambda x: x[char_checking] == '1', CO2_lines)))
-        to_pop = '0' if count_1 >= len(CO2_lines)/2 else '1'
+            list(filter(lambda x: x[i] == '1', CO2_lines)))
+        to_remove = '0' if count_1 >= len(CO2_lines)/2 else '1'
 
         CO2_lines = list(
-            filter(lambda x: x[char_checking] == to_pop, CO2_lines))
+            filter(lambda x: x[i] == to_remove, CO2_lines))
 
-        char_checking += 1
+        i += 1
         if len(CO2_lines) == 1:
             return int(CO2_lines[0], 2)
 

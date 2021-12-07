@@ -26,9 +26,7 @@ def calculate_fish(lines: list, days: int) -> int:
             fishes[i + 1] = 0
         fishes[8] = babies
         fishes[6] += babies
-        # for v in fishes.keys():
-        #     print(f"day: {day + 1}, fishes at {v} days: {fishes.get(v)}")
-        # print()
+
     return sum(fishes.values())
 
 

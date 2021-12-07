@@ -51,13 +51,13 @@ class Board:
             return -1
 
 
-def getInformation(filename: str):
+def get_information(filename: str):
     with open(filename) as file:
         calls = list(map(int, (next(file).rstrip()).split(",")))
         next(file)
-        raw_boards = file.read().split('\n\n')
+        rawBoards = file.read().split('\n\n')
 
-    boards = [Board(raw_board.rstrip()) for raw_board in raw_boards]
+    boards = [Board(rawBoard.rstrip()) for rawBoard in rawBoards]
 
     return calls, boards
 
@@ -82,7 +82,7 @@ def part2(calls: list, boards: list) -> int:
 
 
 def main():
-    instructions, lines = getInformation("Inputs/Day04.txt")
+    instructions, lines = get_information("Inputs/Day04.txt")
     # Part 1: 35711
     print(f"Part 1: {part1(instructions, lines)}")
     # Part 2: 5586
@@ -95,7 +95,7 @@ def main():
 
 
 def test():
-    instructions, lines = getInformation("Inputs/Day04_sample.txt")
+    instructions, lines = get_information("Inputs/Day04_sample.txt")
 
     result = part1(instructions, lines)
     print(f"Part 1 sample: {result}")
@@ -105,7 +105,7 @@ def test():
     print(f"Part 2 sample: {result}")
     assert(result == 1924)
 
-    instructions, lines = getInformation("Inputs/Day04.txt")
+    instructions, lines = get_information("Inputs/Day04.txt")
     result = part1(instructions, lines)
     print(f"Part 1: {result}")
     assert(result == 35711)

@@ -7,29 +7,29 @@ from Common import get_lines, time_function
 from statistics import mean, median
 
 
-def sequence(num: int) -> int:
+def triangular_sequence(num: int) -> int:
     return num * (num + 1) // 2
 
 
 def calc(num: int, toCheck: list) -> int:
-    return sum(list(map(lambda x: sequence(abs(x - num)), toCheck)))
+    return sum(list(map(lambda x: triangular_sequence(abs(x - num)), toCheck)))
 
 
 def part1(lines: list) -> int:
     # Credit to the subreddit for pointing out that part 1 can be found
     # with the median of the list
-    pos = list(map(int, (lines[0].split(","))))
-    med = int(median(pos))
-    return sum(list(map(lambda x: abs(x - med), pos)))
+    lines = list(map(int, (lines[0].split(","))))
+    med = int(median(lines))
+    return sum(list(map(lambda x: abs(x - med), lines)))
 
 
 def part2(lines: list) -> int:
     # Credit to the subreddit for pointing out that part 1 can be found
     # with the mean +-1 of the list
-    pos = list(map(int, (lines[0].split(","))))
-    avg = round(mean(pos))
-    return min([int(calc(avg, pos)), int(calc(avg + 1, pos)),
-                int(calc(avg - 1, pos))])
+    lines = list(map(int, (lines[0].split(","))))
+    avg = round(mean(lines))
+    return min([int(calc(avg - 1, lines)), int(calc(avg, lines)),
+                int(calc(avg + 1, lines))])
 
 
 def test():

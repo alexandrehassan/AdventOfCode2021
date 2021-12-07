@@ -18,7 +18,7 @@ class Vent:
         if self.isHorizontal or self.isVertical:
             self.order()
         else:
-            self.orderDiagonal()
+            self.order_diagonal()
 
     @property
     def slope(self) -> int:
@@ -28,7 +28,7 @@ class Vent:
         else:
             return -1
 
-    def part1Count(self) -> bool:
+    def part1_valid(self) -> bool:
         return self.isHorizontal or self.isVertical
 
     def order(self) -> int:
@@ -36,12 +36,12 @@ class Vent:
             self.x1, self.y1, self.x2, self.y2 =\
                 self.x2, self.y2, self.x1, self.y1
 
-    def orderDiagonal(self):
+    def order_diagonal(self):
         if self.x1 > self.x2:
             self.x1, self.y1, self.x2, self.y2 =\
                 self.x2, self.y2, self.x1, self.y1
 
-    def getCoords(self):
+    def get_coords(self):
         if self.isVertical:
             for i in range(self.y1, self.y2 + 1):
                 yield (i, self.x1)
@@ -63,9 +63,9 @@ def get_num_dangers(lines: list, part1: bool) -> int:
     vents = [Vent(i) for i in lines]
     grid = DefaultDict(int)
     if part1:
-        vents = list(filter(lambda x: x.part1Count(), vents))
+        vents = list(filter(lambda x: x.part1_valid(), vents))
     for vent in vents:
-        for coord in vent.getCoords():
+        for coord in vent.get_coords():
             grid[coord] += 1
     return sum(1 for i in grid.values() if i >= 2)
 

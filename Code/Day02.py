@@ -7,23 +7,23 @@ from Common import get_lines, time_function
 
 
 def part1(lines: list) -> int:
-    posX, posY = 0, 0
+    x_position, y_position = 0, 0
     for line in lines:
         instruction = line.split(" ")[0]
         distance = int(line.split(" ")[1])
         if instruction == "up":
-            posY -= distance
+            y_position -= distance
         elif instruction == "down":
-            posY += distance
+            y_position += distance
         elif instruction == "forward":
-            posX += distance
+            x_position += distance
         else:
             print("Something went wrong")
-    return posX * posY
+    return x_position * y_position
 
 
 def part2(lines: list) -> int:
-    posX, posY, aim = 0, 0, 0
+    x_position, y_position, aim = 0, 0, 0
     for line in lines:
         instruction = line.split(" ")[0]
         distance = int(line.split(" ")[1])
@@ -32,11 +32,11 @@ def part2(lines: list) -> int:
         elif instruction == "down":
             aim += distance
         elif instruction == "forward":
-            posX += distance
-            posY += aim * distance
+            x_position += distance
+            y_position += aim * distance
         else:
             print("Something went wrong")
-    return posX * posY
+    return x_position * y_position
 
 
 def main():
