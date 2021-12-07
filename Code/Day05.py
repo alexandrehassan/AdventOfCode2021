@@ -16,10 +16,9 @@ class Vent:
         self.isVertical = self.x1 == self.x2
         self.isHorizontal = self.y1 == self.y2
         if self.isHorizontal or self.isVertical:
-            self.x1, self.x2 = self.order(self.x1, self.x2)
-            self.y1, self.y2 = self.order(self.y1, self.y2)
-            return
-        self.orderDiagonal()
+            self.order()
+        else:
+            self.orderDiagonal()
 
     @property
     def slope(self) -> int:
@@ -32,11 +31,10 @@ class Vent:
     def part1Count(self) -> bool:
         return self.isHorizontal or self.isVertical
 
-    def order(self, z1: int, z2: int) -> int:
-        if z1 < z2:
-            return z1, z2
-        else:
-            return z2, z1
+    def order(self) -> int:
+        if self.x1 > self.x2 or self.y1 > self.y2:
+            self.x1, self.y1, self.x2, self.y2 =\
+                self.x2, self.y2, self.x1, self.y1
 
     def orderDiagonal(self):
         if self.x1 > self.x2:
@@ -73,11 +71,11 @@ def get_num_dangers(part1: bool) -> int:
 
 
 def part1():
-    return get_num_dangers(True)
+    return get_num_dangers(part1=True)
 
 
 def part2():
-    return get_num_dangers(False)
+    return get_num_dangers(part1=False)
 
 
 def main():
