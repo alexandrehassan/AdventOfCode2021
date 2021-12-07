@@ -4,6 +4,7 @@ For problem statement:
 @author: Alexandre Hassan
 """
 from Common import get_lines, time_function
+from statistics import mean, median
 
 
 def sequence(num: int) -> int:
@@ -11,47 +12,24 @@ def sequence(num: int) -> int:
 
 
 def calc(num: int, toCheck: list) -> int:
-    return sum(list(map(lambda x: abs(x - num), toCheck)))
-
-
-def calc_2(num: int, toCheck: list) -> int:
     return sum(list(map(lambda x: sequence(abs(x - num)), toCheck)))
 
 
 def part1(lines: list) -> int:
+    # Credit to the subreddit for pointing out that part 1 can be found
+    # with the median of the list
     pos = list(map(int, (lines[0].split(","))))
-    pos.sort()
-    top = len(pos) - 1
-    bottom = 0
-    middle = (top + bottom) // 2
-
-    while True:
-        top_dist = calc(pos[top], pos)
-        bottom_dist = calc(pos[bottom], pos)
-
-        if top_dist < bottom_dist:
-            bottom = middle
-        else:
-            top = middle
-        if top_dist == bottom_dist:
-            return top_dist
+    med = int(median(pos))
+    return sum(list(map(lambda x: abs(x - med), pos)))
 
 
 def part2(lines: list) -> int:
+    # Credit to the subreddit for pointing out that part 1 can be found
+    # with the mean +-1 of the list
     pos = list(map(int, (lines[0].split(","))))
-    pos.sort()
-    top = pos[-1]
-    bottom = pos[0]
-
-    while True:
-        top_dist = calc_2(top, pos)
-        bottom_dist = calc_2(bottom, pos)
-        if top_dist < bottom_dist:
-            bottom += 1
-        else:
-            top -= 1
-        if top_dist == bottom_dist:
-            return top_dist
+    avg = round(mean(pos))
+    return min([int(calc(avg, pos)), int(calc(avg + 1, pos)),
+                int(calc(avg - 1, pos))])
 
 
 def test():
@@ -74,9 +52,9 @@ def test():
     print(f"Part 2: {result}")
     assert(result == 104149091)
 
-    # Part 1: 0.0009632410000000002s
+    # Part 1: 0.0002950209999999842s
     print(f"Part 1: {time_function(lambda: part1(lines))}s")
-    # Part 2: 0.931904042s
+    # Part 2: 0.0011027729999999992s
     print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
@@ -87,9 +65,9 @@ def main():
     # Part 2: 104149091
     print(f"Part 2: {part2(lines)}")
 
-    # Part 1: 0.0009632410000000002s
+    # Part 1: 0.0002950209999999842s
     print(f"Part 1: {time_function(lambda: part1(lines))}s")
-    # Part 2: 0.931904042s
+    # Part 2: 0.0011027729999999992s
     print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
