@@ -59,8 +59,8 @@ class Vent:
         return f"{self.x1},{self.y1}->{self.x2},{self.y2}"
 
 
-def get_num_dangers(part1: bool) -> int:
-    vents = [Vent(i) for i in input]
+def get_num_dangers(lines: list, part1: bool) -> int:
+    vents = [Vent(i) for i in lines]
     grid = DefaultDict(int)
     if part1:
         vents = list(filter(lambda x: x.part1Count(), vents))
@@ -70,39 +70,52 @@ def get_num_dangers(part1: bool) -> int:
     return sum(1 for i in grid.values() if i >= 2)
 
 
-def part1():
-    return get_num_dangers(part1=True)
+def part1(lines: list):
+    return get_num_dangers(lines, part1=True)
 
 
-def part2():
-    return get_num_dangers(part1=False)
+def part2(lines: list):
+    return get_num_dangers(lines, part1=False)
 
 
 def main():
+    lines = get_lines("Inputs/Day05.txt")
     # Part 1: 7468
-    print(f"Part 1: {part1()}")
+    print(f"Part 1: {part1(lines)}")
     # Part 2: 22364
-    print(f"Part 2: {part2()}")
+    print(f"Part 2: {part2(lines)}")
 
     # Part 1: 0.049304637000000005s
-    print(f"Part 1: {time_function(part1)}s")
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
     # Part 2: 0.098618044s
-    print(f"Part 2: {time_function(part2)}s")
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
 def test():
-    part1_result = part1()
-    print(f"Part 1: {part1_result}")
-    assert part1_result == 7468
-    part2_result = part2()
-    print(f"Part 2: {part2_result}")
-    assert part2_result == 22364
+    lines = get_lines("Inputs/Day05_sample.txt")
 
-    print(f"Part 1: {time_function(part1,10)}s")
-    print(f"Part 2: {time_function(part2,10)}s")
+    result = part1(lines)
+    print(f"Part 1 sample: {result}")
+    assert(result == 5)
 
+    result = part2(lines)
+    print(f"Part 2 sample: {result}")
+    assert(result == 12)
 
-input = get_lines("Inputs/Day05.txt")
+    lines = get_lines("Inputs/Day05.txt")
+    result = part1(lines)
+    print(f"Part 1: {result}")
+    assert(result == 7468)
+
+    result = part2(lines)
+    print(f"Part 2: {result}")
+    assert(result == 22364)
+
+    # Part 1: 0.049304637000000005s
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
+    # Part 2: 0.098618044s
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
+
 
 if __name__ == "__main__":
-    main()
+    test()

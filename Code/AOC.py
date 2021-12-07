@@ -4,6 +4,7 @@ import Day03
 import Day04
 import Day05
 import Day06
+import Day07
 
 print("Day 1")
 Day01.main()
@@ -22,3 +23,6 @@ Day05.main()
 
 print("\nDay 6")
 Day06.main()
+
+print("\nDay 7")
+Day07.main()

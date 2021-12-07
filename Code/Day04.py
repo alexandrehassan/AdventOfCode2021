@@ -51,19 +51,18 @@ class Board:
             return -1
 
 
-def makeBoards() -> list:
-    with open("Inputs/Day04.txt") as file:
-
+def getInformation(filename: str):
+    with open(filename) as file:
         calls = list(map(int, (next(file).rstrip()).split(",")))
         next(file)
         raw_boards = file.read().split('\n\n')
+
     boards = [Board(raw_board.rstrip()) for raw_board in raw_boards]
 
     return calls, boards
 
 
-def part1() -> int:
-    calls, boards = makeBoards()
+def part1(calls: list, boards: list) -> int:
 
     result = -1
     for call in calls:
@@ -73,8 +72,7 @@ def part1() -> int:
                 return result
 
 
-def part2() -> int:
-    calls, boards = makeBoards()
+def part2(calls: list, boards: list) -> int:
 
     result = -1
     for call in calls:
@@ -86,36 +84,43 @@ def part2() -> int:
 
 
 def main():
+    instructions, lines = getInformation("Inputs/Day04.txt")
     # Part 1: 35711
-    print(f"Part 1: {part1()}")
+    print(f"Part 1: {part1(instructions, lines)}")
     # Part 2: 5586
-    print(f"Part 2: {part2()}")
+    print(f"Part 2: {part2(instructions, lines)}")
 
     # Part 1: 0.007785375999999999s
-    print(f"Part 1: {time_function(part1)}s")
+    print(f"Part 1: {time_function(lambda: part1(instructions, lines))}s")
     # Part 2: 0.017704187s
-    print(f"Part 2: {time_function(part2)}s")
+    print(f"Part 2: {time_function(lambda: part2(instructions, lines))}s")
 
 
 def test():
-    # Part 1: 35711
-    part1_result = part1()
-    print(f"Part 1: {part1_result}")
-    assert part1_result == 35711
-    # Part 2: 5586
-    part2_result = part2()
-    print(f"Part 2: {part2_result}")
-    assert part2_result == 5586
+    instructions, lines = getInformation("Inputs/Day04_sample.txt")
+
+    result = part1(instructions, lines)
+    print(f"Part 1 sample: {result}")
+    assert(result == 4512)
+
+    result = part2(instructions, lines)
+    print(f"Part 2 sample: {result}")
+    assert(result == 1924)
+
+    instructions, lines = getInformation("Inputs/Day04.txt")
+    result = part1(instructions, lines)
+    print(f"Part 1: {result}")
+    assert(result == 35711)
+
+    result = part2(instructions, lines)
+    print(f"Part 2: {result}")
+    assert(result == 5586)
 
     # Part 1: 0.007785375999999999s
-    print(f"Part 1: {time_function(part1)}s")
+    print(f"Part 1: {time_function(lambda: part1(instructions, lines))}s")
     # Part 2: 0.017704187s
-    print(f"Part 2: {time_function(part2)}s")
+    print(f"Part 2: {time_function(lambda: part2(instructions, lines))}s")
 
-
-# lines = get_lines("Inputs/Day04.txt")
-# calls = list(map(int, lines.pop(0).split(",")))
-# lines.pop(0)
 
 if __name__ == "__main__":
     test()

@@ -18,7 +18,7 @@ def calc_2(num: int, toCheck: list) -> int:
     return sum(list(map(lambda x: sequence(abs(x - num)), toCheck)))
 
 
-def part1() -> int:
+def part1(lines: list) -> int:
     pos = list(map(int, (lines[0].split(","))))
     pos.sort()
     top = len(pos) - 1
@@ -37,7 +37,7 @@ def part1() -> int:
             return top_dist
 
 
-def part2() -> int:
+def part2(lines: list) -> int:
     pos = list(map(int, (lines[0].split(","))))
     pos.sort()
     top = pos[-1]
@@ -51,32 +51,48 @@ def part2() -> int:
         else:
             top -= 1
         if top_dist == bottom_dist:
+            print("complete")
             return top_dist
 
 
 def test():
-    part1_result = part1()
-    print(f"Part 1: {part1_result}")
-    assert part1_result == 364898
+    lines = get_lines("Inputs/Day07_sample.txt")
 
-    part2_result = part2()
-    print(f"Part 2: {part2_result}")
-    assert part2_result == 104149091
+    result = part1(lines)
+    print(f"Part 1 sample: {result}")
+    assert(result == 37)
+
+    result = part2(lines)
+    print(f"Part 2 sample: {result}")
+    assert(result == 168)
+
+    lines = get_lines("Inputs/Day07.txt")
+    result = part1(lines)
+    print(f"Part 1: {result}")
+    assert(result == 364898)
+
+    result = part2(lines)
+    print(f"Part 2: {result}")
+    assert(result == 104149091)
+
+    # Part 1: 0.0009632410000000002s
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
+    # Part 2: 0.931904042s
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
 def main():
+    lines = get_lines("Inputs/Day07.txt")
     # Part 1: 351092
-    print(f"Part 1: {part1()}")
+    print(f"Part 1: {part1(lines)}")
     # Part 2: 104149091
-    print(f"Part 2: {part2()}")
+    print(f"Part 2: {part2(lines)}")
 
     # Part 1: 0.0009632410000000002s
-    print(f"Part 1: {time_function(part1)}s")
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
     # Part 2: 0.931904042s
-    print(f"Part 2: {time_function(part2)}s")
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
-
-lines = get_lines("Inputs/Day07.txt")
 
 if __name__ == "__main__":
-    main()
+    test()

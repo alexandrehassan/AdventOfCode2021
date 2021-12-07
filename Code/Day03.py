@@ -6,28 +6,7 @@ For problem statement:
 from Common import get_lines, time_function
 
 
-def part1() -> int:
-    line_length = len(lines[0])
-    num_lines = len(lines)
-    count_1 = [0] * line_length
-
-    for line in lines:
-        for j in range(line_length):
-            count_1[j] += int(line[j])
-
-    gamma = ""
-    epsilon = ""
-    for count in count_1:
-        if count > num_lines/2:
-            gamma += '1'
-            epsilon += '0'
-        else:
-            gamma += '0'
-            epsilon += '1'
-    return int(gamma, 2) * int(epsilon, 2)
-
-
-def get_O2() -> int:
+def get_O2(lines: list) -> int:
     O2_lines = lines
     count_1 = 0
     char_checking = 0
@@ -48,7 +27,7 @@ def get_O2() -> int:
             return int(O2_lines[0], 2)
 
 
-def get_CO2() -> int:
+def get_CO2(lines: list) -> int:
     CO2_lines = lines
     count_1 = 0
     char_checking = 0
@@ -67,23 +46,69 @@ def get_CO2() -> int:
             return int(CO2_lines[0], 2)
 
 
-def part2() -> int:
-    return get_CO2() * get_O2()
+def part1(lines: list) -> int:
+    line_length = len(lines[0])
+    num_lines = len(lines)
+    count_1 = [0] * line_length
+
+    for line in lines:
+        for j in range(line_length):
+            count_1[j] += int(line[j])
+
+    gamma = ""
+    epsilon = ""
+    for count in count_1:
+        if count > num_lines/2:
+            gamma += '1'
+            epsilon += '0'
+        else:
+            gamma += '0'
+            epsilon += '1'
+    return int(gamma, 2) * int(epsilon, 2)
+
+
+def part2(lines: list) -> int:
+    return get_CO2(lines) * get_O2(lines)
 
 
 def main():
+    lines = get_lines("Inputs/Day03.txt")
     # Part 1: 3633500
-    print(f"Part 1: {part1()}")
+    print(f"Part 1: {part1(lines)}")
     # Part 2: 4550283
-    print(f"Part 2: {part2()}")
+    print(f"Part 2: {part2(lines)}")
 
     # Part 1: 0.0010945069999999998s
-    print(f"Part 1: {time_function(part1)}s")
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
     # Part 2: 0.0007929939999999999s
-    print(f"Part 2: {time_function(part2)}s")
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
-lines = get_lines("Inputs/Day03.txt")
+def test():
+    lines = get_lines("Inputs/Day03_sample.txt")
+
+    result = part1(lines)
+    print(f"Part 1 sample: {result}")
+    assert(result == 198)
+
+    result = part2(lines)
+    print(f"Part 2 sample: {result}")
+    assert(result == 230)
+
+    lines = get_lines("Inputs/Day03.txt")
+    result = part1(lines)
+    print(f"Part 1: {result}")
+    assert(result == 3633500)
+
+    result = part2(lines)
+    print(f"Part 2: {result}")
+    assert(result == 4550283)
+
+    # Part 1: 0.0010945069999999998s
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
+    # Part 2: 0.0007929939999999999s
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
+
 
 if __name__ == "__main__":
-    main()
+    test()

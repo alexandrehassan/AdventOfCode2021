@@ -7,7 +7,7 @@ from typing import DefaultDict
 from Common import get_lines, time_function
 
 
-def setup() -> DefaultDict:
+def setup(lines: list) -> DefaultDict:
     input = lines[0].split(',')
     input = list(map(int, input))
     fish = DefaultDict(int)
@@ -16,8 +16,8 @@ def setup() -> DefaultDict:
     return fish
 
 
-def calculate_fish(days: int) -> int:
-    fishes = setup()
+def calculate_fish(lines: list, days: int) -> int:
+    fishes = setup(lines)
     for day in range(days):
         babies = fishes[0]
         fishes[0] = 0
@@ -32,27 +32,52 @@ def calculate_fish(days: int) -> int:
     return sum(fishes.values())
 
 
-def part1() -> int:
-    return calculate_fish(80)
+def part1(lines: list) -> int:
+    return calculate_fish(lines, 80)
 
 
-def part2() -> int:
-    return calculate_fish(256)
+def part2(lines: list) -> int:
+    return calculate_fish(lines, 256)
 
 
 def main():
+    lines = get_lines("Inputs/Day06.txt")
     # Part 1: 351092
-    print(f"Part 1: {part1()}")
+    print(f"Part 1: {part1(lines)}")
     # Part 2: 1595330616005
-    print(f"Part 2: {part2()}")
+    print(f"Part 2: {part2(lines)}")
 
     # Part 1: 0.00012867999999999997s
-    print(f"Part 1: {time_function(part1)}s")
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
     # Part 2: 0.00030791799999999996s
-    print(f"Part 2: {time_function(part2)}s")
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
-lines = get_lines("Inputs/Day06.txt")
+def test():
+    lines = get_lines("Inputs/Day06_sample.txt")
+
+    result = part1(lines)
+    print(f"Part 1 sample: {result}")
+    assert(result == 5934)
+
+    result = part2(lines)
+    print(f"Part 2 sample: {result}")
+    assert(result == 26984457539)
+
+    lines = get_lines("Inputs/Day06.txt")
+    result = part1(lines)
+    print(f"Part 1: {result}")
+    assert(result == 351092)
+
+    result = part2(lines)
+    print(f"Part 2: {result}")
+    assert(result == 1595330616005)
+
+    # Part 1: 0.00012867999999999997s
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
+    # Part 2: 0.00030791799999999996s
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
+
 
 if __name__ == "__main__":
-    main()
+    test()
