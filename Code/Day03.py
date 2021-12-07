@@ -6,43 +6,25 @@ For problem statement:
 from Common import get_lines, time_function
 
 
-def get_O2(lines: list) -> int:
-    O2_lines = lines
-    count_1 = 0
-    char_checking = 0
-    to_pop = '1'
-
-    while True:
-        count_1 = len(
-            list(filter(lambda x: x[char_checking] == '1', O2_lines)))
-
-        to_pop = '1' if count_1 >= len(O2_lines)/2 else '0'
-
-        O2_lines = list(
-            filter(lambda x: x[char_checking] == to_pop, O2_lines))
-
-        char_checking += 1
-
-        if len(O2_lines) == 1:
-            return int(O2_lines[0], 2)
-
-
-def get_CO2(lines: list) -> int:
-    CO2_lines = lines
+def calculate(CO2: bool, lines: list) -> int:
+    bytes = lines
     count_1 = 0
     to_remove = '1'
 
-    for i in range(len(CO2_lines)):
+    for i in range(len(bytes)):
         count_1 = len(
-            list(filter(lambda x: x[i] == '1', CO2_lines)))
-        to_remove = '0' if count_1 >= len(CO2_lines)/2 else '1'
+            list(filter(lambda x: x[i] == '1', bytes)))
+        to_remove = '0' if CO2 != (count_1 >= len(bytes)/2) else '1'
 
-        CO2_lines = list(
-            filter(lambda x: x[i] == to_remove, CO2_lines))
+        bytes = list(
+            filter(lambda x: x[i] == to_remove, bytes))
 
-        i += 1
-        if len(CO2_lines) == 1:
-            return int(CO2_lines[0], 2)
+        if len(bytes) == 1:
+            return int(bytes[0], 2)
+
+
+def flip_bit(string: str) -> int:
+    return int(string.replace('1', '2').replace('0', '1').replace('2', '0'), 2)
 
 
 def part1(lines: list) -> int:
@@ -55,19 +37,13 @@ def part1(lines: list) -> int:
             count_1[j] += int(line[j])
 
     gamma = ""
-    epsilon = ""
     for count in count_1:
-        if count > num_lines/2:
-            gamma += '1'
-            epsilon += '0'
-        else:
-            gamma += '0'
-            epsilon += '1'
-    return int(gamma, 2) * int(epsilon, 2)
+        gamma += '0' if count >= int(num_lines/2) else '1'
+    return int(gamma, 2) * flip_bit(gamma)
 
 
 def part2(lines: list) -> int:
-    return get_CO2(lines) * get_O2(lines)
+    return calculate(True, lines) * calculate(False, lines)
 
 
 def main():
