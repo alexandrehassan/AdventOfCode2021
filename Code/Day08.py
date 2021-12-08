@@ -3,7 +3,7 @@ For problem statement:
     https://adventofcode.com/2021/day/1
 @author: Alexandre Hassan
 """
-from typing import Counter, DefaultDict
+from typing import DefaultDict
 from Common import get_lines, time_function
 
 
@@ -109,7 +109,7 @@ def part1(lines: list) -> int:
     output_values = []
     for line in lines:
         output_values.extend(line.split(" | ")[1].split(" "))
-    return Counter(filter(lambda x: len(x) in [2, 3, 4, 7], output_values))
+    return sum(len(x) in [2, 3, 4, 7] for x in output_values)
 
 
 def part2(lines: list) -> int:
