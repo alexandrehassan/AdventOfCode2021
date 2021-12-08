@@ -51,31 +51,5 @@ def main():
     print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
-def test():
-    lines = get_lines("Inputs/Day06_sample.txt")
-
-    result = part1(lines)
-    print(f"Part 1 sample: {result}")
-    assert(result == 5934)
-
-    result = part2(lines)
-    print(f"Part 2 sample: {result}")
-    assert(result == 26984457539)
-
-    lines = get_lines("Inputs/Day06.txt")
-    result = part1(lines)
-    print(f"Part 1: {result}")
-    assert(result == 351092)
-
-    result = part2(lines)
-    print(f"Part 2: {result}")
-    assert(result == 1595330616005)
-
-    # Part 1: 0.00012867999999999997s
-    print(f"Part 1: {time_function(lambda: part1(lines))}s")
-    # Part 2: 0.00030791799999999996s
-    print(f"Part 2: {time_function(lambda: part2(lines))}s")
-
-
 if __name__ == "__main__":
-    test()
+    main()

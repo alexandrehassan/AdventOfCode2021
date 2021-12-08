@@ -32,32 +32,6 @@ def part2(lines: list) -> int:
                 int(calc(avg + 1, lines))])
 
 
-def test():
-    lines = get_lines("Inputs/Day07_sample.txt")
-
-    result = part1(lines)
-    print(f"Part 1 sample: {result}")
-    assert(result == 37)
-
-    result = part2(lines)
-    print(f"Part 2 sample: {result}")
-    assert(result == 168)
-
-    lines = get_lines("Inputs/Day07.txt")
-    result = part1(lines)
-    print(f"Part 1: {result}")
-    assert(result == 364898)
-
-    result = part2(lines)
-    print(f"Part 2: {result}")
-    assert(result == 104149091)
-
-    # Part 1: 0.0002950209999999842s
-    print(f"Part 1: {time_function(lambda: part1(lines))}s")
-    # Part 2: 0.0011027729999999992s
-    print(f"Part 2: {time_function(lambda: part2(lines))}s")
-
-
 def main():
     lines = get_lines("Inputs/Day07.txt")
     # Part 1: 351092
@@ -72,4 +46,4 @@ def main():
 
 
 if __name__ == "__main__":
-    test()
+    main()
