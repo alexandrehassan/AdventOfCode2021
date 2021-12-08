@@ -77,8 +77,11 @@ def test_day07():
 
 def test_day08():
     lines = get_lines("Inputs/Day08_sample.txt")
-    assert Day08.part1(lines) == 37, "Day08 part1 sample failed"
-    assert Day08.part2(lines) == 168, "Day08 part2 sample failed"
+    assert Day08.part1(lines) == 26, "Day08 part1 sample failed"
+    day08_part2_sample = [
+        "acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf"]
+    assert Day08.part2((day08_part2_sample)
+                       ) == 5353, "Day08 part2 sample failed"
     lines = get_lines("Inputs/Day08.txt")
-    assert Day08.part1(lines) == 364898, "Day08 part1 failed"
-    assert Day08.part2(lines) == 104149091, "Day08 part2 failed"
+    assert Day08.part1(lines) == 504, "Day08 part1 failed"
+    assert Day08.part2(lines) == 1073431, "Day08 part2 failed"
