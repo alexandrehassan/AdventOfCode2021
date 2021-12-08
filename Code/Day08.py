@@ -3,28 +3,28 @@ For problem statement:
     https://adventofcode.com/2021/day/1
 @author: Alexandre Hassan
 """
-from typing import DefaultDict
+from typing import Counter, DefaultDict
 from Common import get_lines, time_function
 
 
-def sort_string(string: str):
+def string_sort(string: str):
     return ''.join(sorted(string))
 
 
-def find_diff(a: str, b: str) -> str:
+def string_differences(a: str, b: str) -> str:
     if len(a) > len(b):
-        return sort_string(''.join(set(a) - set(b)))
+        return string_sort(''.join(set(a) - set(b)))
     else:
-        return sort_string(''.join(set(b) - set(a)))
+        return string_sort(''.join(set(b) - set(a)))
 
 
-def find_similar(a: str, b: str) -> str:
+def string_similarities(a: str, b: str) -> str:
     a = set(a)
     b = set(b)
     if len(a) > len(b):
-        return sort_string(''.join(a.intersection(b)))
+        return string_sort(''.join(a.intersection(b)))
     else:
-        return sort_string(''.join(b.intersection(a)))
+        return string_sort(''.join(b.intersection(a)))
 
 
 class Proccessed_line:
@@ -38,8 +38,8 @@ def process_line(line: str) -> Proccessed_line:
     raw = line.split(" | ")
     inputs = raw[0].split(" ")
     outputs = raw[1].split(" ")
-    inputs = [sort_string(i) for i in inputs]
-    outputs = [sort_string(i) for i in outputs]
+    inputs = [string_sort(i) for i in inputs]
+    outputs = [string_sort(i) for i in outputs]
     return Proccessed_line(inputs, outputs)
 
 
@@ -63,28 +63,28 @@ def solve(processed: Proccessed_line) -> DefaultDict[int, str]:
         elif length == 6:
             six_characters.add(value)
 
-    segments[1] = find_diff(known_values["1"], known_values["7"])
+    segments[1] = string_differences(known_values["1"], known_values["7"])
     temp = known_values["4"] + segments[1]
     for num in six_characters:
-        if len(find_diff(num, temp)) == 1:
+        if len(string_differences(num, temp)) == 1:
             known_values["9"] = num
             six_characters.remove(num)
             break
 
     for num in five_characters:
-        if len(find_diff(num, known_values["9"])) != 1:
+        if len(string_differences(num, known_values["9"])) != 1:
             known_values["2"] = num
             five_characters.remove(num)
             break
 
-    temp = find_diff(known_values["9"], known_values["7"])
+    temp = string_differences(known_values["9"], known_values["7"])
     for num in six_characters:
-        if len(find_diff(num, temp)) == 3:
+        if len(string_differences(num, temp)) == 3:
             known_values["6"] = num
         else:
             known_values["0"] = num
 
-    segments[3] = find_diff(known_values["8"], known_values["6"])
+    segments[3] = string_differences(known_values["8"], known_values["6"])
 
     for num in five_characters:
         if segments[3] in num:
@@ -108,17 +108,12 @@ def get_output_num(raw_line: str) -> int:
 def part1(lines: list) -> int:
     output_values = []
     for line in lines:
-        out = line.split(" | ")[1]
-        output_values.extend(out.split(" "))
-    return len(list(filter(lambda x: len(x) == 2 or len(
-        x) == 4 or len(x) == 3 or len(x) == 7, output_values)))
+        output_values.extend(line.split(" | ")[1].split(" "))
+    return Counter(filter(lambda x: len(x) in [2, 3, 4, 7], output_values))
 
 
 def part2(lines: list) -> int:
-    running_sum = 0
-    for line in lines:
-        running_sum += get_output_num(line)
-    return running_sum
+    return sum(get_output_num(line) for line in lines)
 
 
 def main():
