@@ -10,8 +10,7 @@ def part1(lines: list) -> int:
     count_increases = 0
     count_of_lines = len(lines)
     for i in range(1, count_of_lines):
-        if lines[i] > lines[i - 1]:
-            count_increases += 1
+        count_increases += lines[i] > lines[i - 1]
     return count_increases
 
 
@@ -21,9 +20,7 @@ def part2(lines: list) -> int:
     for i in range(1, count_of_lines - 1):
         current_slide = sum(lines[i-1:i+2])
         next_slide = sum(lines[i:i+3])
-        # print(f"{current_slide} , {next_slide} at {i}")
-        if current_slide < next_slide:
-            count_increases += 1
+        count_increases += current_slide < next_slide
     return count_increases
 
 
