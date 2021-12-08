@@ -13,39 +13,30 @@ def sort_string(string: str):
 
 def find_diff(a: str, b: str) -> str:
     if len(a) > len(b):
-        for ch in b:
-            a = a.replace(ch, "")
-        return a
+        return sort_string(''.join(set(a) - set(b)))
     else:
-        for ch in a:
-            b = b.replace(ch, "")
-        return b
+        return sort_string(''.join(set(b) - set(a)))
 
 
 def find_similar(a: str, b: str) -> str:
-    sim = ""
+    a = set(a)
+    b = set(b)
     if len(a) > len(b):
-        for ch in b:
-            if ch in a:
-                sim += ch
-
+        return sort_string(''.join(a.intersection(b)))
     else:
-        for ch in a:
-            if ch in a:
-                sim += ch
-    return sim
+        return sort_string(''.join(b.intersection(a)))
 
 
-class L:
-    def __init__(self, long_5: list, long_6: list, all_sequence: list,
+class Proccessed_line:
+    def __init__(self, long_5: list, long_6: list, inputs: list,
                  outputs: list) -> None:
         self.long_5 = long_5
         self.long_6 = long_6
-        self.all_sequence = all_sequence
         self.outputs = outputs
+        self.inputs = inputs
 
 
-def process_line(line: str) -> L:
+def process_line(line: str) -> Proccessed_line:
     long_5 = set()
     long_6 = set()
     raw = line.split(" | ")
@@ -53,64 +44,60 @@ def process_line(line: str) -> L:
     outputs = raw[1].split(" ")
     inputs = [sort_string(i) for i in inputs]
     outputs = [sort_string(i) for i in outputs]
-    all_num = inputs + outputs
-    return L(long_5, long_6, all_num, outputs)
+    return Proccessed_line(long_5, long_6, inputs, outputs)
 
 
-def solve(processed: L) -> DefaultDict[int, str]:
+def solve(processed: Proccessed_line) -> DefaultDict[int, str]:
     segments = DefaultDict(str)
     known_values = DefaultDict(str)
-    for value in processed.all_sequence:
+    for value in processed.inputs:
         length = len(value)
         if length == 2:
-            known_values[1] = value
+            known_values["1"] = value
         elif length == 3:
-            known_values[7] = value
+            known_values["7"] = value
         elif length == 4:
-            known_values[4] = value
+            known_values["4"] = value
         elif length == 7:
-            known_values[8] = value
+            known_values["8"] = value
         elif length == 5:
             processed.long_5.add(value)
         elif length == 6:
             processed.long_6.add(value)
 
-    segments[1] = find_diff(known_values[1], known_values[7])
-    temp = known_values[4] + segments[1]
+    segments[1] = find_diff(known_values["1"], known_values["7"])
+    temp = known_values["4"] + segments[1]
     for num in processed.long_6:
         if len(find_diff(num, temp)) == 1:
-            known_values[9] = num
+            known_values["9"] = num
             processed.long_6.remove(num)
             break
-
-    segments[5] = find_diff(known_values[9], known_values[8])
-    segments[7] = find_diff(known_values[9], known_values[4] + segments[1])
     for num in processed.long_5:
-        if len(find_diff(num, known_values[9])) != 1:
-            known_values[2] = num
+        if len(find_diff(num, known_values["9"])) != 1:
+            known_values["2"] = num
             processed.long_5.remove(num)
             break
-    temp = find_diff(known_values[9], known_values[7])
+    temp = find_diff(known_values["9"], known_values["7"])
     for num in processed.long_6:
         if len(find_diff(num, temp)) == 3:
-            known_values[6] = num
+            known_values["6"] = num
         else:
-            known_values[0] = num
-    segments[3] = find_diff(known_values[8], known_values[6])
-    segments[4] = find_diff(known_values[8], known_values[0])
-    segments[6] = find_diff(known_values[1], segments[3])
-    segments[2] = find_diff(known_values[8], segments[6] + known_values[2])
-    known_values[5] = find_diff(known_values[9], segments[3])
-    known_values[3] = find_diff(known_values[9], segments[2])
+            known_values["0"] = num
+    segments[3] = find_diff(known_values["8"], known_values["6"])
+    segments[6] = find_diff(known_values["1"], segments[3])
+    segments[2] = find_diff(known_values["8"], segments[6] + known_values["2"])
+    known_values["5"] = find_diff(known_values["9"], segments[3])
+    known_values["3"] = find_diff(known_values["9"], segments[2])
     return known_values
 
 
-def get_output_num(line: L, known_values: DefaultDict[int, str]) -> int:
+def get_output_num(line: Proccessed_line, known_values:
+                   DefaultDict[int, str]) -> int:
     out = ""
     keys = list(known_values.keys())
     values = list(known_values.values())
     for output in line.outputs:
-        out += str(keys[values.index(output)])
+        out += keys[values.index(output)]
     return int(out)
 
 

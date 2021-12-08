@@ -86,3 +86,16 @@ def test_day08():
     lines = get_lines("Inputs/Day08.txt")
     assert Day08.part1(lines) == 504, "Day08 part1 failed"
     assert Day08.part2(lines) == 1073431, "Day08 part2 failed"
+
+
+def test_day08_functions():
+    abcdef = "abcdef"
+    abc = "abc"
+    abcg = "abcg"
+    assert Day08.find_diff(abcg, abc) == "g", "find_diff failed"
+    assert Day08.find_diff(abcdef, abc) == "def", "find_diff failed"
+    assert Day08.find_diff(abc, abcg) == "g", "find_diff failed"
+    assert Day08.find_diff(abcdef, abcg) == "def", "find_diff failed"
+    assert Day08.find_similar(abcg, abc) == "abc", "find_similar failed"
+    assert Day08.find_similar(abc, abcg) == "abc", "find_similar failed"
+    assert Day08.sort_string("bca") == "abc", "sort_string failed"
