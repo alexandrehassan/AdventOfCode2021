@@ -28,26 +28,24 @@ def find_similar(a: str, b: str) -> str:
 
 
 class Proccessed_line:
-    def __init__(self, long_5: list, long_6: list, inputs: list,
-                 outputs: list) -> None:
-        self.long_5 = long_5
-        self.long_6 = long_6
+    def __init__(self, inputs: list, outputs: list) -> None:
         self.outputs = outputs
         self.inputs = inputs
 
 
 def process_line(line: str) -> Proccessed_line:
-    long_5 = set()
-    long_6 = set()
+
     raw = line.split(" | ")
     inputs = raw[0].split(" ")
     outputs = raw[1].split(" ")
     inputs = [sort_string(i) for i in inputs]
     outputs = [sort_string(i) for i in outputs]
-    return Proccessed_line(long_5, long_6, inputs, outputs)
+    return Proccessed_line(inputs, outputs)
 
 
 def solve(processed: Proccessed_line) -> DefaultDict[int, str]:
+    five_characters = set()
+    six_characters = set()
     segments = DefaultDict(str)
     known_values = DefaultDict(str)
     for value in processed.inputs:
@@ -61,70 +59,50 @@ def solve(processed: Proccessed_line) -> DefaultDict[int, str]:
         elif length == 7:
             known_values["8"] = value
         elif length == 5:
-            processed.long_5.add(value)
+            five_characters.add(value)
         elif length == 6:
-            processed.long_6.add(value)
+            six_characters.add(value)
 
     segments[1] = find_diff(known_values["1"], known_values["7"])
     temp = known_values["4"] + segments[1]
-    for num in processed.long_6:
+    for num in six_characters:
         if len(find_diff(num, temp)) == 1:
             known_values["9"] = num
-            processed.long_6.remove(num)
+            six_characters.remove(num)
             break
-    for num in processed.long_5:
+
+    for num in five_characters:
         if len(find_diff(num, known_values["9"])) != 1:
             known_values["2"] = num
-            processed.long_5.remove(num)
+            five_characters.remove(num)
             break
+
     temp = find_diff(known_values["9"], known_values["7"])
-    for num in processed.long_6:
+    for num in six_characters:
         if len(find_diff(num, temp)) == 3:
             known_values["6"] = num
         else:
             known_values["0"] = num
+
     segments[3] = find_diff(known_values["8"], known_values["6"])
-    segments[6] = find_diff(known_values["1"], segments[3])
-    segments[2] = find_diff(known_values["8"], segments[6] + known_values["2"])
-    known_values["5"] = find_diff(known_values["9"], segments[3])
-    known_values["3"] = find_diff(known_values["9"], segments[2])
+
+    for num in five_characters:
+        if segments[3] in num:
+            known_values["3"] = num
+        else:
+            known_values["5"] = num
     return known_values
 
 
-def get_output_num(line: Proccessed_line, known_values:
-                   DefaultDict[int, str]) -> int:
+def get_output_num(raw_line: str) -> int:
+    processed = process_line(raw_line)
+    known_values = solve(processed)
     out = ""
     keys = list(known_values.keys())
     values = list(known_values.values())
-    for output in line.outputs:
+    for output in processed.outputs:
         out += keys[values.index(output)]
     return int(out)
-
-
-def get_value(segments: DefaultDict, output: str):
-    if len(output) == 2:
-        return 1
-    elif len(output) == 3:
-        return 7
-    elif len(output) == 4:
-        return 4
-    elif len(output) == 7:
-        return 8
-    elif len(output) == 5:
-        if segments[6] in output:
-            if segments[2] in output:
-                return 5
-            else:
-                return 3
-        else:
-            return 2
-    else:
-        if segments[4] not in output:
-            return 0
-        elif segments[3] in output:
-            return 6
-        else:
-            return 9
 
 
 def part1(lines: list) -> int:
@@ -139,8 +117,7 @@ def part1(lines: list) -> int:
 def part2(lines: list) -> int:
     running_sum = 0
     for line in lines:
-        line_info = process_line(line)
-        running_sum += get_output_num(line_info, solve(line_info))
+        running_sum += get_output_num(line)
     return running_sum
 
 
