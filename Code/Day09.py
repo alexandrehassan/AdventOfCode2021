@@ -6,14 +6,6 @@ For problem statement:
 from Common import get_lines, time_function
 
 
-def valid(row: int, col: int, grid: list) -> bool:
-    try:
-        grid[row][col]
-        return True
-    except IndexError:
-        return False
-
-
 def product_largest_3(nums: list) -> list:
     nums.sort(reverse=True)
     return nums[0] * nums[1] * nums[2]
@@ -55,17 +47,36 @@ def is_low_point(row: int, col: int, grid: list) -> bool:
 def find_lowpoints(grid: list) -> list:
     low_points = {}
     for row, line in enumerate(grid):
-        for col, value in enumerate(line):
+        for col in range(len(line)):
             if is_low_point(row, col, grid):
                 low_points[(row, col)] = get_neighbors((row, col), grid)
     return low_points
 
 
-def part1(lines: list) -> int:
+def get_basin_size(grid, low_points, low_point):
+    to_check = low_points[low_point].copy()
+    checked = set()
+    while len(to_check) > 0:
+        current = to_check.pop()
+        if current not in checked:
+            neighbors = get_neighbors(current, grid)
+            low_points[low_point].update(neighbors)
+            to_check.update(neighbors)
+            checked.add(current)
+        to_check = set(filter(lambda x: x not in checked, to_check))
+
+
+def get_grid(lines: list) -> list:
     grid = []
-    risk_level = 0
     for line in lines:
         grid.append(list(map(int, (list(line)))))
+    return grid
+
+
+def part1(lines: list) -> int:
+    grid = get_grid(lines)
+    risk_level = 0
+
     low_points = find_lowpoints(grid)
     row, line = 0, 0
     for low_point in low_points.keys():
@@ -75,27 +86,15 @@ def part1(lines: list) -> int:
 
 
 def part2(lines: list) -> int:
-    grid = []
-    for line in lines:
-        grid.append(list(map(int, (list(line)))))
+    grid = get_grid(lines)
 
     low_points = find_lowpoints(grid)
 
     basin_sizes = []
     for low_point in low_points.keys():
-        to_check = low_points[low_point].copy()
-        checked = set()
-        while len(to_check) > 0:
-            current = to_check.pop()
-            if current not in checked:
-                neighbors = get_neighbors(current, grid)
-                low_points[low_point].update(neighbors)
-                to_check.update(neighbors)
-                checked.add(current)
-            to_check = set(filter(lambda x: x not in checked, to_check))
+        get_basin_size(grid, low_points, low_point)
 
         basin_sizes.append(len(low_points[low_point]) + 1)
-
     return product_largest_3(basin_sizes)
 
 
