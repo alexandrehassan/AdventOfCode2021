@@ -8,6 +8,7 @@ import Day05
 import Day06
 import Day07
 import Day08
+import Day09
 
 
 def test_day01():
@@ -99,3 +100,12 @@ def test_day08_functions():
     assert Day08.string_similarities(abcg, abc) == "abc", "find_similar failed"
     assert Day08.string_similarities(abc, abcg) == "abc", "find_similar failed"
     assert Day08.string_sort("bca") == "abc", "sort_string failed"
+
+
+def test_day09():
+    lines = get_lines("Inputs/Day09_sample.txt")
+    assert Day09.part1(lines) == 15, "Day09 part1 sample failed"
+    assert Day09.part2(lines) == 1134, "Day09 part2 sample failed"
+    lines = get_lines("Inputs/Day09.txt")
+    assert Day09.part1(lines) == 545, "Day09 part1 failed"
+    assert Day09.part2(lines) == 950600, "Day09 part2 failed"
