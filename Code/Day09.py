@@ -32,77 +32,58 @@ def product_largest_3(nums: list) -> list:
     return nums[0] * nums[1] * nums[2]
 
 
+def find_lowpoints(grid: list) -> list:
+    low_points = {}
+    for row, line in enumerate(grid):
+        for col, value in enumerate(line):
+            if col == len(line) - 1 and row == len(grid) - 1:
+                if grid[row - 1][col] > value and grid[row][col - 1] > value:
+                    low_points[(row, col)] = get_neighbors((row, col), grid)
+            elif col == len(line) - 1:
+                if grid[row - 1][col] > value and grid[row + 1][col] > value \
+                        and grid[row][col - 1] > value:
+                    low_points[(row, col)] = get_neighbors((row, col), grid)
+            elif row == len(grid) - 1:
+                if grid[row - 1][col] > value and grid[row][col + 1] > value \
+                        and grid[row][col - 1] > value:
+                    low_points[(row, col)] = get_neighbors((row, col), grid)
+            elif row == 0 and col == 0:
+                if grid[row + 1][col] > value and grid[row][col + 1] > value:
+                    low_points[(row, col)] = get_neighbors((row, col), grid)
+            elif row == 0:
+                if grid[row + 1][col] > value and grid[row][col + 1] > value \
+                        and grid[row][col - 1] > value:
+                    low_points[(row, col)] = get_neighbors((row, col), grid)
+            elif col == 0:
+                if grid[row + 1][col] > value and grid[row - 1][col] > value \
+                        and grid[row][col + 1] > value:
+                    low_points[(row, col)] = get_neighbors((row, col), grid)
+            else:
+                if grid[row + 1][col] > value and grid[row - 1][col] > value \
+                    and grid[row][col + 1] > value \
+                        and grid[row][col - 1] > value:
+                    low_points[(row, col)] = get_neighbors((row, col), grid)
+    return low_points
+
+
 def part1(lines: list) -> int:
     grid = []
     risk_level = 0
     for line in lines:
         grid.append(list(map(int, (list(line)))))
-    for row, line in enumerate(grid):
-        for col, value in enumerate(line):
-            if col == len(line) - 1 and row == len(grid) - 1:
-                if grid[row - 1][col] > value and grid[row][col - 1] > value:
-                    risk_level += value + 1
-            elif col == len(line) - 1:
-                if grid[row - 1][col] > value and grid[row + 1][col] > value \
-                        and grid[row][col - 1] > value:
-                    risk_level += value + 1
-            elif row == len(grid) - 1:
-                if grid[row - 1][col] > value and grid[row][col + 1] > value \
-                        and grid[row][col - 1] > value:
-                    risk_level += value + 1
-            elif row == 0 and col == 0:
-                if grid[row + 1][col] > value and grid[row][col + 1] > value:
-                    risk_level += value + 1
-            elif row == 0:
-                if grid[row + 1][col] > value and grid[row][col + 1] > value \
-                        and grid[row][col - 1] > value:
-                    risk_level += value + 1
-            elif col == 0:
-                if grid[row + 1][col] > value and grid[row - 1][col] > value \
-                        and grid[row][col + 1] > value:
-                    risk_level += value + 1
-            else:
-                if grid[row + 1][col] > value and grid[row - 1][col] > value \
-                    and grid[row][col + 1] > value \
-                        and grid[row][col - 1] > value:
-                    risk_level += value + 1
+    low_points = find_lowpoints(grid)
+    row, line = 0, 0
+    for low_point in low_points.keys():
+        row, line = low_point
+        risk_level += grid[row][line] + 1
     return risk_level
 
 
 def part2(lines: list) -> int:
     grid = []
-    low_points = {}
     for line in lines:
         grid.append(list(map(int, (list(line)))))
-    for row, line in enumerate(grid):
-        for col, value in enumerate(line):
-            if col == len(line) - 1 and row == len(grid) - 1:
-                if grid[row - 1][col] > value and grid[row][col - 1] > value:
-                    low_points[(row, col)] = get_neighbors((row, col), grid)
-            elif col == len(line) - 1:
-                if grid[row - 1][col] > value and grid[row + 1][col] > value \
-                        and grid[row][col - 1] > value:
-                    low_points[(row, col)] = get_neighbors((row, col), grid)
-            elif row == len(grid) - 1:
-                if grid[row - 1][col] > value and grid[row][col + 1] > value \
-                        and grid[row][col - 1] > value:
-                    low_points[(row, col)] = get_neighbors((row, col), grid)
-            elif row == 0 and col == 0:
-                if grid[row + 1][col] > value and grid[row][col + 1] > value:
-                    low_points[(row, col)] = get_neighbors((row, col), grid)
-            elif row == 0:
-                if grid[row + 1][col] > value and grid[row][col + 1] > value \
-                        and grid[row][col - 1] > value:
-                    low_points[(row, col)] = get_neighbors((row, col), grid)
-            elif col == 0:
-                if grid[row + 1][col] > value and grid[row - 1][col] > value \
-                        and grid[row][col + 1] > value:
-                    low_points[(row, col)] = get_neighbors((row, col), grid)
-            else:
-                if grid[row + 1][col] > value and grid[row - 1][col] > value \
-                    and grid[row][col + 1] > value \
-                        and grid[row][col - 1] > value:
-                    low_points[(row, col)] = get_neighbors((row, col), grid)
+    low_points = find_lowpoints(grid)
 
     basins = []
     for low_point in low_points.keys():
