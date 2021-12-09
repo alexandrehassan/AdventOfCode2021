@@ -43,8 +43,8 @@ def get_neighbors(row: int, col: int, grid: list) -> list:
 def is_low_point(row: int, col: int, grid: list) -> bool:
     adjacent_points = get_adjacent_points(row, col, len(grid), len(grid[0]))
 
-    for point in adjacent_points:
-        if grid[point[0]][point[1]] <= grid[row][col]:
+    for adj_row, adj_col in adjacent_points:
+        if grid[adj_row][adj_col] <= grid[row][col]:
             return False
 
     return True
@@ -61,18 +61,19 @@ def find_lowpoints(grid: list) -> list:
     return low_points
 
 
-def get_basin_size(grid, low_points, low_point):
-    to_check = low_points[low_point].copy()
+def get_basin_size(grid: list, low_points: set):
+    basin = low_points
+    to_check = low_points.copy()
     checked = set()
 
     while len(to_check) > 0:
         current = to_check.pop()
-        if current not in checked:
-            neighbors = get_neighbors(*current, grid)
-            low_points[low_point].update(neighbors)
-            to_check.update(neighbors)
-            checked.add(current)
+        neighbors = get_neighbors(*current, grid)
+        to_check.update(neighbors)
+        basin.update(neighbors)
+        checked.add(current)
         to_check = set(filter(lambda x: x not in checked, to_check))
+    return len(basin) + 1
 
 
 def get_grid(lines: list) -> list:
@@ -86,12 +87,10 @@ def get_grid(lines: list) -> list:
 
 def part1(lines: list) -> int:
     grid = get_grid(lines)
-    row, line, risk_level = 0, 0, 0
-
     low_points = find_lowpoints(grid)
+    risk_level = 0
 
-    for low_point in low_points.keys():
-        row, line = low_point
+    for row, line in low_points.keys():
         risk_level += grid[row][line] + 1
 
     return risk_level
@@ -103,8 +102,7 @@ def part2(lines: list) -> int:
     low_points = find_lowpoints(grid)
 
     for low_point in low_points.keys():
-        get_basin_size(grid, low_points, low_point)
-        basin_sizes.append(len(low_points[low_point]) + 1)
+        basin_sizes.append(get_basin_size(grid, low_points[low_point]))
 
     return product_largest_3(basin_sizes)
 
