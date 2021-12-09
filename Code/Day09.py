@@ -8,27 +8,25 @@ from Common import get_lines, time_function
 
 def get_neighbors(point: tuple, grid: list) -> list:
     neighbors = set()
-    col_max = len(grid[0])
-    row_max = len(grid)
     row, col = point
-    if row > 0:
-        if grid[row - 1][col] > grid[row][col] and grid[row - 1][col] != 9:
-            neighbors.add((row - 1, col))
-    if col > 0:
-        if grid[row][col - 1] > grid[row][col] and grid[row][col - 1] != 9:
-            neighbors.add((row, col - 1))
-    if row < row_max - 1:
-        if grid[row + 1][col] > grid[row][col] and grid[row + 1][col] != 9:
-            neighbors.add((row + 1, col))
-    if col < col_max - 1:
-        if grid[row][col + 1] > grid[row][col] and grid[row][col + 1] != 9:
-            neighbors.add((row, col + 1))
+    if row > 0 and grid[row - 1][col] > grid[row][col] \
+            and grid[row - 1][col] != 9:
+        neighbors.add((row - 1, col))
+    if col > 0 and grid[row][col - 1] > grid[row][col] \
+            and grid[row][col - 1] != 9:
+        neighbors.add((row, col - 1))
+    if row < len(grid) - 1 and grid[row + 1][col] > grid[row][col] \
+            and grid[row + 1][col] != 9:
+
+        neighbors.add((row + 1, col))
+    if col < len(grid[0]) - 1 and grid[row][col + 1] > grid[row][col] \
+            and grid[row][col + 1] != 9:
+        neighbors.add((row, col + 1))
     return neighbors
 
 
 def product_largest_3(nums: list) -> list:
     nums.sort(reverse=True)
-    nums = nums[:3]
     return nums[0] * nums[1] * nums[2]
 
 
@@ -83,9 +81,10 @@ def part2(lines: list) -> int:
     grid = []
     for line in lines:
         grid.append(list(map(int, (list(line)))))
+
     low_points = find_lowpoints(grid)
 
-    basins = []
+    basin_sizes = []
     for low_point in low_points.keys():
         to_check = low_points[low_point].copy()
         checked = set()
@@ -96,10 +95,9 @@ def part2(lines: list) -> int:
                 low_points[low_point].update(neighbors)
                 to_check.update(neighbors)
                 checked.add(current)
-        basins.append(len(low_points[low_point]) + 1)
+        basin_sizes.append(len(low_points[low_point]) + 1)
 
-    basins.sort()
-    return product_largest_3(basins)
+    return product_largest_3(basin_sizes)
 
 
 def main():
