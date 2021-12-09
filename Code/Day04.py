@@ -89,10 +89,10 @@ def main():
     print(f"Part 2: {part2(instructions, lines)}")
 
     # Part 1: 0.012491363s
-    print(f"Part 1: {time_function(lambda: part1(instructions, lines))}s")
+    print(f'Part 1: {time_function(lambda: part1(instructions, lines))}s')
     # Part 2: 0.00029262300000000075s
     print(f"Part 2: {time_function(lambda: part2(instructions, lines))}s")
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
