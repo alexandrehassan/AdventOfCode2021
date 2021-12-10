@@ -36,13 +36,9 @@ def get_score(to_add: str) -> int:
 
 
 def part1(lines: list) -> int:
-
-    # lines = list(filter(lambda x: len(x) % 2 == 0, lines))
     score = 0
     for line in lines:
         score += check_line(line)
-        # num_open = list(filter(lambda x: x not in openings.keys(), line))
-        # print(len(line), len(num_open), num_open)
 
     return score
 
@@ -53,23 +49,21 @@ def part2(lines: list) -> int:
         sc = check_line(line, False)
         if sc != 0:
             score.append(sc)
-        # num_open = list(filter(lambda x: x not in openings.keys(), line))
-        # print(len(line), len(num_open), num_open)
     score.sort()
     return score[len(score)//2]
 
 
 def main():
     lines = get_lines("Inputs/Day10.txt")
-    # Part 1:
+    # Part 1: 166191
     print(f"Part 1: {part1(lines)}")
-    # # Part 2:
+    # # Part 2: 1152088313
     print(f"Part 2: {part2(lines)}")
 
-    # # Part 1:
-    # print(f"Part 1: {time_function(lambda: part1(lines))}s")
-    # # Part 2:
-    # print(f"Part 2: {time_function(lambda: part2(lines))}s")
+    # Part 1: 0.00098471s
+    print(f"Part 1: {time_function(lambda: part1(lines))}s")
+    # Part 2: 0.001091627s
+    print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
 if __name__ == "__main__":
