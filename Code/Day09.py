@@ -4,8 +4,8 @@ For problem statement:
 @author: Alexandre Hassan
 https://github.com/alexandrehassan/AdventOfCode2021
 """
-from typing import Generator
-from Common import get_lines, time_function
+from Common import get_lines, time_function, get_int_grid, \
+    adjacent_coordinates, traverse_grid
 
 
 def product_largest_3(nums: list) -> list:
@@ -14,25 +14,11 @@ def product_largest_3(nums: list) -> list:
     return nums[0] * nums[1] * nums[2]
 
 
-def get_adjacent_points(row: int, col: int, num_lines: int, num_col: int) -> list:
-    adjacent_points = []
-
-    if row > 0:
-        adjacent_points.append((row - 1, col))
-    if row < num_lines - 1:
-        adjacent_points.append((row + 1, col))
-    if col > 0:
-        adjacent_points.append((row, col - 1))
-    if col < num_col - 1:
-        adjacent_points.append((row, col + 1))
-
-    return adjacent_points
-
-
 def get_neighbors(row: int, col: int, grid: list) -> list:
     neighbors = set()
     value = grid[row][col]
-    adjacent_points = get_adjacent_points(row, col, len(grid), len(grid[0]))
+    adjacent_points = list(adjacent_coordinates(
+        row, col, (len(grid), len(grid[0]))))
 
     for adj in adjacent_points:
         adj_value = grid[adj[0]][adj[1]]
@@ -43,7 +29,8 @@ def get_neighbors(row: int, col: int, grid: list) -> list:
 
 
 def is_low_point(row: int, col: int, grid: list) -> bool:
-    adjacent_points = get_adjacent_points(row, col, len(grid), len(grid[0]))
+    adjacent_points = list(adjacent_coordinates(
+        row, col, (len(grid), len(grid[0]))))
 
     for adj_row, adj_col in adjacent_points:
         if grid[adj_row][adj_col] <= grid[row][col]:
@@ -55,10 +42,10 @@ def is_low_point(row: int, col: int, grid: list) -> bool:
 def find_lowpoints(grid: list) -> list:
     low_points = {}
 
-    for row, line in enumerate(grid):
-        for col in range(len(line)):
-            if is_low_point(row, col, grid):
-                low_points[(row, col)] = get_neighbors(row, col, grid)
+    for coord in traverse_grid(len(grid), len(grid[0])):
+        row, col = coord
+        if is_low_point(row, col, grid):
+            low_points[(row, col)] = get_neighbors(row, col, grid)
 
     return low_points
 
@@ -78,17 +65,8 @@ def get_basin_size(grid: list, low_points: set):
     return len(basin) + 1
 
 
-def get_grid(lines: list) -> list:
-    grid = []
-
-    for line in lines:
-        grid.append(list(map(int, (list(line)))))
-
-    return grid
-
-
 def part1(lines: list) -> int:
-    grid = get_grid(lines)
+    grid = get_int_grid(lines)
     low_points = find_lowpoints(grid)
     risk_level = 0
 
@@ -100,7 +78,7 @@ def part1(lines: list) -> int:
 
 def part2(lines: list) -> int:
     basin_sizes = []
-    grid = list(get_grid(lines))
+    grid = list(get_int_grid(lines))
     low_points = find_lowpoints(grid)
 
     for low_point in low_points.keys():
@@ -114,14 +92,14 @@ def main():
     global num_col
     global num_lines
 
-    # Part 1:
+    # Part 1: 545
     print(f"Part 1: {part1(lines)}")
-    # Part 2:
+    # Part 2: 950600
     print(f"Part 2: {part2(lines)}")
 
-    # Part 1: 0.02289861800149083s
+    # Part 1: 0.019327273s
     print(f"Part 1: {time_function(lambda: part1(lines))}s")
-    # Part 2: 0.056208234000951054s
+    # Part 2: 0.047794711999999996s
     print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
