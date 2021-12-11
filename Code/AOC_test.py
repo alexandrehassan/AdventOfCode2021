@@ -10,6 +10,7 @@ import Day07
 import Day08
 import Day09
 import Day10
+import Day11
 
 
 def test_day01():
@@ -119,3 +120,12 @@ def test_day10():
     lines = get_lines("Inputs/Day10.txt")
     assert Day10.part1(lines) == 166191, "Day10 part1 failed"
     assert Day10.part2(lines) == 1152088313, "Day10 part2 failed"
+
+
+def test_day11():
+    lines = get_lines("Inputs/Day11_sample.txt")
+    assert Day11.part1(lines) == 1656, "Day11 part1 sample failed"
+    assert Day11.part2(lines) == 195, "Day11 part2 sample failed"
+    lines = get_lines("Inputs/Day11.txt")
+    assert Day11.part1(lines) == 1673, "Day11 part1 failed"
+    assert Day11.part2(lines) == 279, "Day11 part2 failed"
