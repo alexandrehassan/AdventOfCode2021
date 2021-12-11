@@ -51,26 +51,29 @@ def get_grid(lines: list) -> list:
     return grid
 
 
-def flash(grid: list, row: int, col: int):
+def flash(grid: list, to_check: set, row: int, col: int):
     adjacent = get_adjacent_points(row, col, len(grid), len(grid[0]))
-    count = 0
+
     for adj in adjacent:
         grid[adj[0]][adj[1]] += 1
         if grid[adj[0]][adj[1]] > 9:
-            count += flash(grid, adj[0], adj[1])
-    return count
+            to_check.add(adj)
 
 
 def do_step(grid: list):
     flashed = set()
+    to_check = set()
     done = False
+    count = 0
     while not done:
         for row, line in enumerate(grid):
             for col in range(len(line)):
                 if grid[row][col] > 9 and (row, col) not in flashed:
                     flashed.add((row, col))
-                    flash(grid, row, col, 0)
+                    count += 1
+                    flash(grid, to_check, row, col)
         done = is_done(grid, flashed)
+    return count
 
 
 def is_done(grid, flashed):
@@ -82,16 +85,17 @@ def is_done(grid, flashed):
 
 
 def simulate_steps(grid: list, steps: int):
-
+    count = 0
     for _ in range(steps):
         for row, line in enumerate(grid):
             grid[row] = list(map(lambda x: x+1, line))
-        do_step(grid)
+        count += do_step(grid)
+    return count
 
 
 def part1(lines: list) -> int:
     grid = get_grid(lines)
-    simulate_steps(grid, 100)
+    return simulate_steps(grid, 100)
 
 
 def part2(lines: list) -> int:
@@ -102,13 +106,13 @@ def main():
     lines = get_lines("Inputs/Day11_sample.txt")
     # Part 1:
     print(f"Part 1: {part1(lines)}")
-    # Part 2:
-    print(f"Part 2: {part2(lines)}")
+    # # Part 2:
+    # print(f"Part 2: {part2(lines)}")
 
-    # Part 1:
-    print(f"Part 1: {time_function(lambda: part1(lines))}s")
-    # Part 2:
-    print(f"Part 2: {time_function(lambda: part2(lines))}s")
+    # # Part 1:
+    # print(f"Part 1: {time_function(lambda: part1(lines))}s")
+    # # Part 2:
+    # print(f"Part 2: {time_function(lambda: part2(lines))}s")
 
 
 if __name__ == "__main__":
