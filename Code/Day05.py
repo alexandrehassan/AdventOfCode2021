@@ -2,6 +2,7 @@
     For problem statement:
         https://adventofcode.com/2021/day/5
     @author: Alexandre Hassan
+    https://github.com/alexandrehassan/AdventOfCode2021
     """
 from typing import DefaultDict
 from Common import get_lines, time_function

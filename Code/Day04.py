@@ -2,6 +2,7 @@
 For problem statement:
     https://adventofcode.com/2021/day/4
 @author: Alexandre Hassan
+https://github.com/alexandrehassan/AdventOfCode2021
 """
 from Common import time_function
 

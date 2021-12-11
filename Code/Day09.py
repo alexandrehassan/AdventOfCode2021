@@ -2,6 +2,7 @@
 For problem statement:
     https://adventofcode.com/2021/day/9
 @author: Alexandre Hassan
+https://github.com/alexandrehassan/AdventOfCode2021
 """
 from typing import Generator
 from Common import get_lines, time_function
@@ -102,8 +103,8 @@ def part2(lines: list) -> int:
     grid = list(get_grid(lines))
     low_points = find_lowpoints(grid)
 
-    for k, v in low_points:
-        basin_sizes.append(get_basin_size(grid, v))
+    for low_point in low_points.keys():
+        basin_sizes.append(get_basin_size(grid, low_points[low_point]))
 
     return product_largest_3(basin_sizes)
 
