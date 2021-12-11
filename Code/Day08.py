@@ -29,18 +29,13 @@ def string_similarities(a: str, b: str) -> str:
 
 class Proccessed_line:
     def __init__(self, inputs: list, outputs: list) -> None:
-        self.outputs = outputs
-        self.inputs = inputs
+        self.outputs = [string_sort(i) for i in outputs]
+        self.inputs = [string_sort(i) for i in inputs]
 
 
 def process_line(line: str) -> Proccessed_line:
-
     raw = line.split(" | ")
-    inputs = raw[0].split(" ")
-    outputs = raw[1].split(" ")
-    inputs = [string_sort(i) for i in inputs]
-    outputs = [string_sort(i) for i in outputs]
-    return Proccessed_line(inputs, outputs)
+    return Proccessed_line(raw[0].split(" "), raw[1].split(" "))
 
 
 def solve(processed: Proccessed_line) -> DefaultDict[int, str]:

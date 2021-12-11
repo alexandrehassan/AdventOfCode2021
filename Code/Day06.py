@@ -18,7 +18,7 @@ def setup(lines: list) -> DefaultDict:
 
 def calculate_fish(lines: list, days: int) -> int:
     fishes = setup(lines)
-    for day in range(days):
+    for _ in range(days):
         babies = fishes[0]
         fishes[0] = 0
         for i in range(8):
