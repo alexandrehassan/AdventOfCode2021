@@ -15,10 +15,9 @@ def check_line(line: str, part1=True) -> int:
         if char in pairs.keys():
             queue.append(char)
         elif char in closings.keys():
-            if pairs[queue.pop()] == char:
-                continue
-            else:
+            if pairs[queue.pop()] != char:
                 return closings[char] if part1 else 0
+
     if part1:
         return 0
     to_add = ""
@@ -46,7 +45,7 @@ def part1(lines: list) -> int:
 def part2(lines: list) -> int:
     score = []
     for line in lines:
-        sc = check_line(line, False)
+        sc = check_line(line, part1=False)
         if sc != 0:
             score.append(sc)
     score.sort()
