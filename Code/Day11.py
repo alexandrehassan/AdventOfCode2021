@@ -1,4 +1,9 @@
-
+"""
+For problem statement:
+    https://adventofcode.com/2021/day/11
+@author: Alexandre Hassan
+https://github.com/alexandrehassan/AdventOfCode2021
+"""
 from Common import get_lines, time_function, traverse_grid, \
     adjacent_coordinates, get_int_grid
 
