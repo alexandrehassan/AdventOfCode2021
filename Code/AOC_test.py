@@ -12,6 +12,7 @@ import Day09
 import Day10
 import Day11
 import Day12
+import Day13
 
 
 def test_day01():
@@ -139,3 +140,12 @@ def test_day12():
     filename = "Inputs/Day12.txt"
     assert Day12.part1(filename) == 3576, "Day12 part1 failed"
     assert Day12.part2(filename) == 84271, "Day12 part2 failed"
+
+
+def test_day13():
+    filename = "Inputs/Day13_sample.txt"
+    assert Day13.part1(filename) == 17, "Day13 part1 sample failed"
+    # assert Day13.part2(filename) == 1134, "Day13 part2 sample failed"
+    filename = "Inputs/Day13.txt"
+    assert Day13.part1(filename) == 729, "Day13 part1 failed"
+    assert Day13.part2(filename) == 950600, "Day13 part2 failed"
