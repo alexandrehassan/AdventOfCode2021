@@ -32,13 +32,13 @@ def count_paths(cave_map: DefaultDict, single_small_twice: bool) -> int:
         if origin.islower():
             seen = seen.union({origin})
         n_paths = 0
-        for target in cave_map[origin]:
-            if target == "end":
+        for cave in cave_map[origin]:
+            if cave == "end":
                 n_paths += 1
-            elif target not in seen:
-                n_paths += count_next_paths(target, seen, twice)
-            elif target != "start" and twice:
-                n_paths += count_next_paths(target, seen, False)
+            elif cave not in seen:
+                n_paths += count_next_paths(cave, seen, twice)
+            elif cave != "start" and twice:
+                n_paths += count_next_paths(cave, seen, False)
         return n_paths
     return count_next_paths("start", frozenset(), single_small_twice)
 
